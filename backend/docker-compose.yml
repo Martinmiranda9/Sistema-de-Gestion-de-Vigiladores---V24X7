@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sgv-sqlserver
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=SGV_Pass123!
+      - MSSQL_PID=Developer
+    ports:
+      - "1433:1433"
+    volumes:
+      - sgv_sqldata:/var/opt/mssql
+    restart: unless-stopped
+
+volumes:
+  sgv_sqldata:
+    driver: local
