@@ -11,6 +11,7 @@ public class SGVDbContext : DbContext
 
     // DbSets
     public DbSet<Vigilador> Vigiladores => Set<Vigilador>();
+    public DbSet<Objetivo> Objetivos => Set<Objetivo>();
     public DbSet<Feriado> Feriados => Set<Feriado>();
     public DbSet<RegistroTurno> RegistroTurnos => Set<RegistroTurno>();
     public DbSet<ConfiguracionLiquidacion> ConfiguracionesLiquidacion => Set<ConfiguracionLiquidacion>();
@@ -19,10 +20,15 @@ public class SGVDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        // Vigilador - índice único en DNI
+        // Vigilador - índice único en DNI y relación con Objetivo
         modelBuilder.Entity<Vigilador>(entity =>
         {
             entity.HasIndex(v => v.DNI).IsUnique();
+            
+            entity.HasOne(v => v.Objetivo)
+                  .WithMany()
+                  .HasForeignKey(v => v.ObjetivoId)
+                  .OnDelete(DeleteBehavior.SetNull); // Default behaviour or whatever works
         });
 
         // RegistroTurno - relación con Vigilador

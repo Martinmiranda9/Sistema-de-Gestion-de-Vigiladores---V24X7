@@ -78,9 +78,9 @@ public class VigiladoresController : ControllerBase
     /// Busca vigiladores por objetivo (lugar asignado).
     /// </summary>
     [HttpGet("buscar")]
-    public async Task<ActionResult<IEnumerable<VigiladorDTO>>> GetByObjetivo([FromQuery] string objetivo)
+    public async Task<ActionResult<IEnumerable<VigiladorDTO>>> GetByObjetivo([FromQuery] int objetivoId)
     {
-        var vigiladores = await _vigiladorService.GetByObjetivoAsync(objetivo);
+        var vigiladores = await _vigiladorService.GetByObjetivoAsync(objetivoId);
         return Ok(vigiladores);
     }
 }

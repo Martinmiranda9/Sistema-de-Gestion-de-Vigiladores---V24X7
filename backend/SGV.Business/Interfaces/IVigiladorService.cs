@@ -9,5 +9,5 @@ public interface IVigiladorService
     Task<VigiladorDTO> CreateAsync(VigiladorCreateDTO dto);
     Task<VigiladorDTO?> UpdateAsync(int id, VigiladorUpdateDTO dto);
     Task<bool> DeleteAsync(int id);
-    Task<IEnumerable<VigiladorDTO>> GetByObjetivoAsync(string objetivo);
+    Task<IEnumerable<VigiladorDTO>> GetByObjetivoAsync(int objetivoId);
 }

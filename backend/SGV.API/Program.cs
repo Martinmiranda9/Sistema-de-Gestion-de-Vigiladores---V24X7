@@ -46,6 +46,7 @@ builder.Services.AddScoped<IVigiladorService, VigiladorService>();
 builder.Services.AddScoped<IFeriadoService, FeriadoService>();
 builder.Services.AddScoped<IRegistroTurnoService, RegistroTurnoService>();
 builder.Services.AddScoped<IConfiguracionLiquidacionService, ConfiguracionLiquidacionService>();
+builder.Services.AddScoped<IObjetivoService, ObjetivoService>();
 
 var app = builder.Build();
 

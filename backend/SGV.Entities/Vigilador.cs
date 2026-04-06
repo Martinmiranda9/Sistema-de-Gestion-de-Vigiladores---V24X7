@@ -22,8 +22,10 @@ public class Vigilador
     public string DNI { get; set; } = string.Empty;
 
     [Required]
-    [StringLength(200)]
-    public string Objetivo { get; set; } = string.Empty;
+    public int? ObjetivoId { get; set; }
+    
+    [ForeignKey("ObjetivoId")]
+    public Objetivo? Objetivo { get; set; }
 
     [Required]
     public bool Activo { get; set; } = true;

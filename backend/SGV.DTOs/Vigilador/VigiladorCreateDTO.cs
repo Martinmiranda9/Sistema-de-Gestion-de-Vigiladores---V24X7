@@ -19,7 +19,5 @@ public class VigiladorCreateDTO
     [StringLength(20)]
     public string DNI { get; set; } = string.Empty;
 
-    [Required(ErrorMessage = "El objetivo es obligatorio.")]
-    [StringLength(200)]
-    public string Objetivo { get; set; } = string.Empty;
+    public int? ObjetivoId { get; set; }
 }
