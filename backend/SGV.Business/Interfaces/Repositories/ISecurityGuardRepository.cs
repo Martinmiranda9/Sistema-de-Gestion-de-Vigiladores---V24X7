@@ -4,10 +4,10 @@ namespace SGV.Business.Interfaces.Repositories;
 
 public interface ISecurityGuardRepository
 {
-    Task<IEnumerable<SecurityGuard>> GetAllAsync();
+    Task<IEnumerable<SecurityGuard>> GetAllAsync(bool includeInactive = false);
     Task<SecurityGuard?> GetByIdAsync(int id);
     Task<IEnumerable<SecurityGuard>> GetByWorkplaceAsync(int workplaceId);
-    Task<bool> ExistsByNationalIdAsync(string nationalId, int? excludeId = null);
+    Task<bool> ExistsByDNIAsync(string dni, int? excludeId = null);
     Task AddAsync(SecurityGuard securityGuard);
     Task SaveChangesAsync();
 }

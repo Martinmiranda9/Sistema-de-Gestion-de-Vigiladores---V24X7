@@ -20,7 +20,7 @@ public class SGVDbContext : DbContext
         // SecurityGuard — unique index on NationalId, optional FK to Workplace
         modelBuilder.Entity<SecurityGuard>(entity =>
         {
-            entity.HasIndex(g => g.NationalId).IsUnique();
+            entity.HasIndex(g => g.DNI).IsUnique();
 
             entity.HasOne(g => g.Workplace)
                   .WithMany()

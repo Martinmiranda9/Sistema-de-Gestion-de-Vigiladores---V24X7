@@ -19,7 +19,7 @@ public class SecurityGuard
 
     [Required]
     [StringLength(20)]
-    public string NationalId { get; set; } = string.Empty;
+    public string DNI { get; set; } = string.Empty;
 
     public int? WorkplaceId { get; set; }
 

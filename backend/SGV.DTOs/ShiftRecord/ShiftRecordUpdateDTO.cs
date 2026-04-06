@@ -11,10 +11,10 @@ public class ShiftRecordUpdateDTO
     public DateTime Date { get; set; }
 
     [Required(ErrorMessage = "La hora de entrada es obligatoria.")]
-    public DateTime StartTime { get; set; }
+    public TimeSpan StartTime { get; set; }
 
     [Required(ErrorMessage = "La hora de salida es obligatoria.")]
-    public DateTime EndTime { get; set; }
+    public TimeSpan EndTime { get; set; }
 
     [StringLength(500)]
     public string? Notes { get; set; }

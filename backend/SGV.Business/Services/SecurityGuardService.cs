@@ -29,7 +29,7 @@ public class SecurityGuardService : ISecurityGuardService
         {
             FirstName = dto.FirstName,
             LastName = dto.LastName,
-            NationalId = dto.NationalId,
+            DNI = dto.DNI,
             WorkplaceId = dto.WorkplaceId,
             IsActive = true
         };
@@ -48,7 +48,7 @@ public class SecurityGuardService : ISecurityGuardService
 
         guard.FirstName = dto.FirstName;
         guard.LastName = dto.LastName;
-        guard.NationalId = dto.NationalId;
+        guard.DNI = dto.DNI;
         guard.WorkplaceId = dto.WorkplaceId;
         guard.IsActive = dto.IsActive;
 
@@ -77,7 +77,7 @@ public class SecurityGuardService : ISecurityGuardService
         Id = g.Id,
         FirstName = g.FirstName,
         LastName = g.LastName,
-        NationalId = g.NationalId,
+        DNI = g.DNI,
         WorkplaceId = g.WorkplaceId,
         WorkplaceName = g.Workplace?.Name,
         IsActive = g.IsActive

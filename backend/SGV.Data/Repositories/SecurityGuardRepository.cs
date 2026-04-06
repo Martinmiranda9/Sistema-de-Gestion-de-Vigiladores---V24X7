@@ -10,9 +10,10 @@ public class SecurityGuardRepository : ISecurityGuardRepository
 
     public SecurityGuardRepository(SGVDbContext context) => _context = context;
 
-    public async Task<IEnumerable<SecurityGuard>> GetAllAsync()
+    public async Task<IEnumerable<SecurityGuard>> GetAllAsync(bool includeInactive = false)
         => await _context.SecurityGuards
             .Include(g => g.Workplace)
+            .Where(g => includeInactive || g.IsActive)
             .AsNoTracking()
             .ToListAsync();
 
@@ -28,9 +29,9 @@ public class SecurityGuardRepository : ISecurityGuardRepository
             .AsNoTracking()
             .ToListAsync();
 
-    public async Task<bool> ExistsByNationalIdAsync(string nationalId, int? excludeId = null)
+    public async Task<bool> ExistsByDNIAsync(string dni, int? excludeId = null)
         => await _context.SecurityGuards
-            .AnyAsync(g => g.NationalId == nationalId && (excludeId == null || g.Id != excludeId));
+            .AnyAsync(g => g.DNI == dni && (excludeId == null || g.Id != excludeId));
 
     public async Task AddAsync(SecurityGuard securityGuard)
         => await _context.SecurityGuards.AddAsync(securityGuard);
