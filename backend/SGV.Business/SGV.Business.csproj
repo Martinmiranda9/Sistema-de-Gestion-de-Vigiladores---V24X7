@@ -1,7 +1,6 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\SGV.Data\SGV.Data.csproj" />
     <ProjectReference Include="..\SGV.Entities\SGV.Entities.csproj" />
     <ProjectReference Include="..\SGV.DTOs\SGV.DTOs.csproj" />
   </ItemGroup>

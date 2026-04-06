@@ -1,7 +1,8 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
     <ProjectReference Include="..\SGV.Entities\SGV.Entities.csproj" />
+    <ProjectReference Include="..\SGV.Business\SGV.Business.csproj" />
   </ItemGroup>
 
   <ItemGroup>

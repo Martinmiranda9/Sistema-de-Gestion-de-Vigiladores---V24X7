@@ -5,42 +5,36 @@ namespace SGV.Data;
 
 public class SGVDbContext : DbContext
 {
-    public SGVDbContext(DbContextOptions<SGVDbContext> options) : base(options)
-    {
-    }
+    public SGVDbContext(DbContextOptions<SGVDbContext> options) : base(options) { }
 
-    // DbSets
-    public DbSet<Vigilador> Vigiladores => Set<Vigilador>();
-    public DbSet<Objetivo> Objetivos => Set<Objetivo>();
-    public DbSet<Feriado> Feriados => Set<Feriado>();
-    public DbSet<RegistroTurno> RegistroTurnos => Set<RegistroTurno>();
-    public DbSet<ConfiguracionLiquidacion> ConfiguracionesLiquidacion => Set<ConfiguracionLiquidacion>();
+    public DbSet<SecurityGuard> SecurityGuards => Set<SecurityGuard>();
+    public DbSet<Workplace> Workplaces => Set<Workplace>();
+    public DbSet<Holiday> Holidays => Set<Holiday>();
+    public DbSet<ShiftRecord> ShiftRecords => Set<ShiftRecord>();
+    public DbSet<PayrollConfig> PayrollConfigs => Set<PayrollConfig>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
-        // Vigilador - índice único en DNI y relación con Objetivo
-        modelBuilder.Entity<Vigilador>(entity =>
+        // SecurityGuard — unique index on NationalId, optional FK to Workplace
+        modelBuilder.Entity<SecurityGuard>(entity =>
         {
-            entity.HasIndex(v => v.DNI).IsUnique();
-            
-            entity.HasOne(v => v.Objetivo)
+            entity.HasIndex(g => g.NationalId).IsUnique();
+
+            entity.HasOne(g => g.Workplace)
                   .WithMany()
-                  .HasForeignKey(v => v.ObjetivoId)
-                  .OnDelete(DeleteBehavior.SetNull); // Default behaviour or whatever works
+                  .HasForeignKey(g => g.WorkplaceId)
+                  .OnDelete(DeleteBehavior.SetNull);
         });
 
-        // RegistroTurno - relación con Vigilador
-        modelBuilder.Entity<RegistroTurno>(entity =>
+        // ShiftRecord — FK to SecurityGuard, restricted delete to preserve history
+        modelBuilder.Entity<ShiftRecord>(entity =>
         {
-            entity.HasOne(rt => rt.Vigilador)
+            entity.HasOne(r => r.SecurityGuard)
                   .WithMany()
-                  .HasForeignKey(rt => rt.VigiladorId)
+                  .HasForeignKey(r => r.SecurityGuardId)
                   .OnDelete(DeleteBehavior.Restrict);
         });
-
-        // Aplicar configuraciones adicionales del assembly
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(SGVDbContext).Assembly);
     }
 }
