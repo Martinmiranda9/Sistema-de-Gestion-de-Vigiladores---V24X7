@@ -9,8 +9,13 @@ namespace SGV.API.Controllers;
 public class WorkplacesController : ControllerBase
 {
     private readonly IWorkplaceService _service;
+    private readonly IShiftRecordService _shiftService;
 
-    public WorkplacesController(IWorkplaceService service) => _service = service;
+    public WorkplacesController(IWorkplaceService service, IShiftRecordService shiftService)
+    {
+        _service = service;
+        _shiftService = shiftService;
+    }
 
     [HttpGet]
     public async Task<ActionResult<IEnumerable<WorkplaceDTO>>> GetAll()
@@ -46,5 +51,19 @@ public class WorkplacesController : ControllerBase
     {
         var result = await _service.DeleteAsync(id);
         return result ? NoContent() : NotFound(new { Message = $"No se encontró el objetivo con Id {id}." });
+    }
+
+    /// <summary>
+    /// Almanaque mensual por objetivo: cada día del mes con los vigiladores que trabajaron.
+    /// GET /api/workplaces/5/calendar?month=4&year=2026
+    /// </summary>
+    [HttpGet("{id}/calendar")]
+    public async Task<ActionResult<WorkplaceCalendarDTO>> GetCalendar(
+        int id, [FromQuery] int month, [FromQuery] int year)
+    {
+        var calendar = await _shiftService.GetWorkplaceCalendarAsync(id, month, year);
+        return calendar == null
+            ? NotFound(new { Message = $"No se encontró el objetivo con Id {id}." })
+            : Ok(calendar);
     }
 }

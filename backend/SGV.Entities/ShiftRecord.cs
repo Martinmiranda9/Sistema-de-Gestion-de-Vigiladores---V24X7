@@ -13,6 +13,10 @@ public class ShiftRecord
 
     public SecurityGuard SecurityGuard { get; set; } = null!;
 
+    public int? WorkplaceId { get; set; }
+
+    public Workplace? Workplace { get; set; }
+
     [Column(TypeName = "date")]
     public DateTime Date { get; set; }
 

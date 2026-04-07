@@ -28,13 +28,18 @@ public class SGVDbContext : DbContext
                   .OnDelete(DeleteBehavior.SetNull);
         });
 
-        // ShiftRecord — FK to SecurityGuard, restricted delete to preserve history
+        // ShiftRecord — FK to SecurityGuard (restricted) and Workplace (nullable)
         modelBuilder.Entity<ShiftRecord>(entity =>
         {
             entity.HasOne(r => r.SecurityGuard)
                   .WithMany()
                   .HasForeignKey(r => r.SecurityGuardId)
                   .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(r => r.Workplace)
+                  .WithMany()
+                  .HasForeignKey(r => r.WorkplaceId)
+                  .OnDelete(DeleteBehavior.SetNull);
         });
     }
 }
