@@ -1,6 +1,6 @@
-version: '3.8'
-
 services:
+
+  # --- BASE DE DATOS (Docker) ---
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: sgv-sqlserver
@@ -9,10 +9,33 @@ services:
       - SA_PASSWORD=SGV_Pass123!
       - MSSQL_PID=Developer
     ports:
-      - "1433:1433"
+      - "1434:1433"   # 1434 en tu PC → 1433 dentro del contenedor (evita conflicto con SQLEXPRESS local)
     volumes:
       - sgv_sqldata:/var/opt/mssql
+    networks:
+      - sgv-network
     restart: unless-stopped
+
+  # --- API .NET (Docker) ---
+  sgv-api:
+    build:
+      context: .
+      dockerfile: SGV.API/Dockerfile
+    container_name: sgv-api
+    ports:
+      - "8080:8080"
+    environment:
+      # Apunta al contenedor sqlserver (por nombre de red interna, puerto 1433)
+      - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=SGV_DB;User Id=sa;Password=SGV_Pass123!;TrustServerCertificate=True
+    depends_on:
+      - sqlserver
+    networks:
+      - sgv-network
+    restart: unless-stopped
+
+networks:
+  sgv-network:
+    driver: bridge
 
 volumes:
   sgv_sqldata:

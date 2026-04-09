@@ -57,16 +57,25 @@ builder.Services.AddScoped<IPayrollConfigService, PayrollConfigService>();
 
 var app = builder.Build();
 
+// ====== SE AGREGO ESTO PARA DOCKER ======
+// Run DB migrations automatically on startup
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<SGVDbContext>();
+    db.Database.Migrate();
+}
+// ========================================
+
 // ===== Middleware Pipeline =====
 
-if (app.Environment.IsDevelopment())
+// ====== SE AGREGO ESTO PARA DOCKER ======
+// Habilitamos Swagger siempre
+app.UseSwagger();
+app.UseSwaggerUI(c =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "SGV API v1");
-    });
-}
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "SGV API v1");
+});
+// ========================================
 
 app.UseHttpsRedirection();
 app.UseCors("AllowAngular");
