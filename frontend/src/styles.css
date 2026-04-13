@@ -1,0 +1,30 @@
+/* =========================================
+   TAILWIND CSS v4 — Base + Plugin PrimeUI
+   ========================================= */
+@import "tailwindcss";
+@import "tailwindcss-primeui";
+
+/* =========================================
+   PRIMEICONS
+   ========================================= */
+@import "primeicons/primeicons.css";
+
+/* =========================================
+   TIPOGRAFÍA — Google Fonts (Inter)
+   ========================================= */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* =========================================
+   ESTILOS GLOBALES BASE
+   ========================================= */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background-color: #f8fafc;
+  color: #1e293b;
+}
