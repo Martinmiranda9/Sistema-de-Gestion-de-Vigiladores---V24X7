@@ -1,0 +1,61 @@
+<div class="dashboard">
+  <!-- Header -->
+  <div class="dashboard-header">
+    <div>
+      <h1 class="dashboard-title">Dashboard</h1>
+      <p class="dashboard-subtitle">Bienvenido de vuelta. Aquí tenés un resumen general del sistema.</p>
+    </div>
+    <div class="header-date">
+      <i class="pi pi-calendar"></i>
+      <span>{{ currentDate | date:'EEEE, d MMMM yyyy':'':'es' }}</span>
+    </div>
+  </div>
+
+  <!-- KPI Cards -->
+  <div class="kpi-grid">
+    <div class="kpi-card" *ngFor="let kpi of kpiCards">
+      <div class="kpi-top">
+        <div class="kpi-icon-wrapper" [style.background]="kpi.color + '12'" [style.color]="kpi.color">
+          <i [class]="kpi.icon"></i>
+        </div>
+        <div class="kpi-trend" [ngClass]="'trend-' + kpi.trend">
+          <i class="pi" [ngClass]="{
+            'pi-arrow-up-right': kpi.trend === 'up',
+            'pi-arrow-down-right': kpi.trend === 'down',
+            'pi-minus': kpi.trend === 'neutral'
+          }"></i>
+          <span>{{ kpi.trendValue }}</span>
+        </div>
+      </div>
+      <div class="kpi-value">{{ kpi.value }}</div>
+      <div class="kpi-label">{{ kpi.title }}</div>
+      <div class="kpi-subtitle">{{ kpi.subtitle }}</div>
+    </div>
+  </div>
+
+  <!-- Quick Actions -->
+  <div class="section-title">
+    <h2>Acciones Rápidas</h2>
+    <p>Accedé rápidamente a las funciones más utilizadas</p>
+  </div>
+
+  <div class="actions-grid">
+    <a
+      class="action-card"
+      *ngFor="let action of quickActions"
+      [routerLink]="action.route"
+      pRipple
+    >
+      <div class="action-icon" [style.background]="action.color + '10'" [style.color]="action.color">
+        <i [class]="action.icon"></i>
+      </div>
+      <div class="action-content">
+        <h3 class="action-title">{{ action.title }}</h3>
+        <p class="action-desc">{{ action.description }}</p>
+      </div>
+      <div class="action-arrow">
+        <i class="pi pi-arrow-right"></i>
+      </div>
+    </a>
+  </div>
+</div>

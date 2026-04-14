@@ -12,6 +12,7 @@ public class SGVDbContext : DbContext
     public DbSet<Holiday> Holidays => Set<Holiday>();
     public DbSet<ShiftRecord> ShiftRecords => Set<ShiftRecord>();
     public DbSet<PayrollConfig> PayrollConfigs => Set<PayrollConfig>();
+    public DbSet<User> Users => Set<User>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -40,6 +41,21 @@ public class SGVDbContext : DbContext
                   .WithMany()
                   .HasForeignKey(r => r.WorkplaceId)
                   .OnDelete(DeleteBehavior.SetNull);
+        });
+
+        // Users — Seed admin user
+        modelBuilder.Entity<User>(entity =>
+        {
+            entity.HasIndex(u => u.Username).IsUnique();
+
+            entity.HasData(new User
+            {
+                Id = 1,
+                Username = "admin",
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword("admin123"),
+                Role = "Admin",
+                IsActive = true
+            });
         });
     }
 }

@@ -21,6 +21,9 @@ public class SecurityGuard
     [StringLength(20)]
     public string DNI { get; set; } = string.Empty;
 
+    [StringLength(50)]
+    public string FileNumber { get; set; } = string.Empty;
+
     public int? WorkplaceId { get; set; }
 
     [ForeignKey("WorkplaceId")]

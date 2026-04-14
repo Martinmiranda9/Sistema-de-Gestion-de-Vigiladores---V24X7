@@ -18,5 +18,8 @@ public class PayrollConfig
     [Column(TypeName = "decimal(18,2)")]
     public decimal HolidayHourRate { get; set; }
 
+    [Column(TypeName = "decimal(18,2)")]
+    public decimal ExtraHourRate { get; set; }
+
     public DateTime ValidFrom { get; set; }
 }

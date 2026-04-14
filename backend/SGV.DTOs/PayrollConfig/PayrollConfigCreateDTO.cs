@@ -16,6 +16,10 @@ public class PayrollConfigCreateDTO
     [Range(0.01, double.MaxValue, ErrorMessage = "El valor de hora en feriado debe ser mayor a 0.")]
     public decimal HolidayHourRate { get; set; }
 
+    [Required]
+    [Range(0.01, double.MaxValue, ErrorMessage = "El valor de hora extra debe ser mayor a 0.")]
+    public decimal ExtraHourRate { get; set; }
+
     [Required(ErrorMessage = "La fecha de vigencia es obligatoria.")]
     public DateTime ValidFrom { get; set; }
 }

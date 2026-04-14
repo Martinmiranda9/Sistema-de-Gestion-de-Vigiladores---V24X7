@@ -6,5 +6,6 @@ public class PayrollConfigDTO
     public decimal NormalHourRate { get; set; }
     public decimal NightSurchargeRate { get; set; }
     public decimal HolidayHourRate { get; set; }
+    public decimal ExtraHourRate { get; set; }
     public DateTime ValidFrom { get; set; }
 }

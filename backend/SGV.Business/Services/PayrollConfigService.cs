@@ -30,6 +30,7 @@ public class PayrollConfigService : IPayrollConfigService
             NormalHourRate = dto.NormalHourRate,
             NightSurchargeRate = dto.NightSurchargeRate,
             HolidayHourRate = dto.HolidayHourRate,
+            ExtraHourRate = dto.ExtraHourRate,
             ValidFrom = dto.ValidFrom.Date
         };
 
@@ -46,6 +47,7 @@ public class PayrollConfigService : IPayrollConfigService
         config.NormalHourRate = dto.NormalHourRate;
         config.NightSurchargeRate = dto.NightSurchargeRate;
         config.HolidayHourRate = dto.HolidayHourRate;
+        config.ExtraHourRate = dto.ExtraHourRate;
         config.ValidFrom = dto.ValidFrom.Date;
 
         await _repo.SaveChangesAsync();
@@ -74,6 +76,7 @@ public class PayrollConfigService : IPayrollConfigService
         NormalHourRate = c.NormalHourRate,
         NightSurchargeRate = c.NightSurchargeRate,
         HolidayHourRate = c.HolidayHourRate,
+        ExtraHourRate = c.ExtraHourRate,
         ValidFrom = c.ValidFrom
     };
 }

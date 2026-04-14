@@ -1,0 +1,67 @@
+<aside class="sidebar" [class.collapsed]="collapsed">
+  <!-- Logo & Brand -->
+  <div class="sidebar-header">
+    <div class="sidebar-brand" routerLink="/dashboard">
+      <div class="brand-logo">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="36" height="36">
+          <circle cx="32" cy="32" r="30" fill="none" stroke="#2563eb" stroke-width="3" />
+          <path d="M16 22 C20 18, 44 18, 48 22" stroke="#2563eb" stroke-width="2.5" fill="none"
+            stroke-linecap="round" />
+          <path d="M14 30 C20 26, 44 26, 50 30" stroke="#2563eb" stroke-width="2.5" fill="none"
+            stroke-linecap="round" />
+          <path d="M16 38 C20 34, 44 34, 48 38" stroke="#2563eb" stroke-width="2.5" fill="none"
+            stroke-linecap="round" />
+          <path d="M18 46 C22 42, 42 42, 46 46" stroke="#2563eb" stroke-width="2.5" fill="none"
+            stroke-linecap="round" />
+        </svg>
+      </div>
+      <div class="brand-text" *ngIf="!collapsed">
+        <span class="brand-name">Vigil 24×7</span>
+        <span class="brand-sub">SAS</span>
+      </div>
+    </div>
+
+    <button class="collapse-btn" (click)="toggleCollapse()" pRipple>
+      <i class="pi" [ngClass]="collapsed ? 'pi-angle-right' : 'pi-angle-left'"></i>
+    </button>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="sidebar-nav">
+    <div class="nav-section" *ngFor="let section of menuSections">
+      <span class="nav-section-title" *ngIf="!collapsed">{{ section.title }}</span>
+      <div class="nav-section-divider" *ngIf="collapsed"></div>
+
+      <a
+        *ngFor="let item of section.items"
+        class="nav-item"
+        [routerLink]="item.route"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: item.route === '/dashboard' }"
+        [pTooltip]="collapsed ? item.label : ''"
+        tooltipPosition="right"
+        pRipple
+      >
+        <div class="nav-icon">
+          <i [class]="item.icon"></i>
+        </div>
+        <span class="nav-label" *ngIf="!collapsed">{{ item.label }}</span>
+        <span class="nav-badge" *ngIf="item.badge && !collapsed">{{ item.badge }}</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- Footer -->
+  <div class="sidebar-footer">
+    <a class="nav-item" routerLink="/settings" routerLinkActive="active" pRipple
+       [pTooltip]="collapsed ? 'Configuración' : ''" tooltipPosition="right">
+      <div class="nav-icon"><i class="pi pi-cog"></i></div>
+      <span class="nav-label" *ngIf="!collapsed">Configuración</span>
+    </a>
+    <a class="nav-item logout-item" (click)="$event.preventDefault()" pRipple
+       [pTooltip]="collapsed ? 'Cerrar Sesión' : ''" tooltipPosition="right">
+      <div class="nav-icon"><i class="pi pi-sign-out"></i></div>
+      <span class="nav-label" *ngIf="!collapsed">Cerrar Sesión</span>
+    </a>
+  </div>
+</aside>

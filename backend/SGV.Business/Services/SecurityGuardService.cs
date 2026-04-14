@@ -30,6 +30,7 @@ public class SecurityGuardService : ISecurityGuardService
             FirstName = dto.FirstName,
             LastName = dto.LastName,
             DNI = dto.DNI,
+            FileNumber = dto.FileNumber,
             WorkplaceId = dto.WorkplaceId,
             IsActive = true
         };
@@ -49,6 +50,7 @@ public class SecurityGuardService : ISecurityGuardService
         guard.FirstName = dto.FirstName;
         guard.LastName = dto.LastName;
         guard.DNI = dto.DNI;
+        guard.FileNumber = dto.FileNumber;
         guard.WorkplaceId = dto.WorkplaceId;
         guard.IsActive = dto.IsActive;
 
@@ -78,6 +80,7 @@ public class SecurityGuardService : ISecurityGuardService
         FirstName = g.FirstName,
         LastName = g.LastName,
         DNI = g.DNI,
+        FileNumber = g.FileNumber,
         WorkplaceId = g.WorkplaceId,
         WorkplaceName = g.Workplace?.Name,
         IsActive = g.IsActive

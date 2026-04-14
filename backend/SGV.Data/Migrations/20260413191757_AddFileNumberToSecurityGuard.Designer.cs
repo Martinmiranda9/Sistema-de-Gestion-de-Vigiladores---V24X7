@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SGV.Data;
 
@@ -11,9 +12,11 @@ using SGV.Data;
 namespace SGV.Data.Migrations
 {
     [DbContext(typeof(SGVDbContext))]
-    partial class SGVDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260413191757_AddFileNumberToSecurityGuard")]
+    partial class AddFileNumberToSecurityGuard
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -53,9 +56,6 @@ namespace SGV.Data.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<decimal>("ExtraHourRate")
-                        .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("HolidayHourRate")
                         .HasColumnType("decimal(18,2)");
@@ -152,49 +152,6 @@ namespace SGV.Data.Migrations
                     b.HasIndex("WorkplaceId");
 
                     b.ToTable("ShiftRecords");
-                });
-
-            modelBuilder.Entity("SGV.Entities.User", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("PasswordHash")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Role")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Username")
-                        .IsUnique();
-
-                    b.ToTable("Users");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            IsActive = true,
-                            PasswordHash = "$2a$11$l2nNVBZE3iziLhdNC3ict.Y7aAeAyDAH2sDfP5lRP81yr/eESG0uK",
-                            Role = "Admin",
-                            Username = "admin"
-                        });
                 });
 
             modelBuilder.Entity("SGV.Entities.Workplace", b =>
