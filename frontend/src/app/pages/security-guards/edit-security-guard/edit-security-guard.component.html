@@ -1,0 +1,154 @@
+<p-toast></p-toast>
+
+<div class="edit-guard-page">
+  <!-- Breadcrumb -->
+  <p-breadcrumb [model]="breadcrumbItems" [home]="breadcrumbHome" styleClass="custom-breadcrumb"></p-breadcrumb>
+
+  <!-- Page Header -->
+  <div class="form-header">
+    <div class="header-left">
+      <div class="header-icon">
+        <i class="pi pi-user-edit"></i>
+      </div>
+      <div>
+        <h1 class="page-title">Editar Vigilador</h1>
+        <p class="page-subtitle">Modificá los datos del vigilador seleccionado. Los campos alterados se marcarán.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main loading spinner -->
+  <div class="loading-state" *ngIf="loadingData">
+    <p-progressSpinner styleClass="w-3rem h-3rem" strokeWidth="6" fill="var(--surface-ground)" animationDuration=".5s"></p-progressSpinner>
+    <span class="ml-3 font-medium text-500">Cargando información del vigilador...</span>
+  </div>
+
+  <!-- Form Card -->
+  <div class="form-card" *ngIf="!loadingData">
+    <div class="card-section">
+      <div class="section-top">
+        <div class="section-label">
+          <i class="pi pi-id-card"></i>
+          <span>Datos personales</span>
+        </div>
+        
+        <!-- Status Toggle -->
+        <div class="status-toggle-wrapper">
+          <span class="text-sm font-semibold text-700 mr-2">Estado:</span>
+          <span
+            class="status-badge"
+            [ngClass]="formData.isActive ? 'badge-active' : 'badge-inactive'"
+            [class.modified-status]="isFieldModified('isActive')"
+            (click)="formData.isActive = !formData.isActive"
+            style="cursor: pointer; user-select: none;"
+          >
+            {{ formData.isActive ? 'Activo' : 'Inactivo' }}
+          </span>
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <!-- Nombre -->
+        <div class="form-group">
+          <label for="firstName">Nombre <span class="required">*</span></label>
+          <input
+            pInputText
+            id="firstName"
+            [(ngModel)]="formData.firstName"
+            placeholder="Ej: Martín"
+            class="w-full"
+            [class.ng-invalid]="!formData.firstName.trim()"
+            [class.modified-input]="isFieldModified('firstName')"
+          />
+        </div>
+
+        <!-- Apellido -->
+        <div class="form-group">
+          <label for="lastName">Apellido <span class="required">*</span></label>
+          <input
+            pInputText
+            id="lastName"
+            [(ngModel)]="formData.lastName"
+            placeholder="Ej: Miranda"
+            class="w-full"
+            [class.ng-invalid]="!formData.lastName.trim()"
+            [class.modified-input]="isFieldModified('lastName')"
+          />
+        </div>
+
+        <!-- DNI -->
+        <div class="form-group">
+          <label for="dni">DNI <span class="required">*</span></label>
+          <input
+            pInputText
+            id="dni"
+            [(ngModel)]="formData.dni"
+            placeholder="Ej: 43692866"
+            class="w-full"
+            [class.ng-invalid]="!formData.dni.trim()"
+            [class.modified-input]="isFieldModified('dni')"
+          />
+        </div>
+      </div>
+    </div>
+
+    <p-divider></p-divider>
+
+    <div class="card-section">
+      <div class="section-label">
+        <i class="pi pi-briefcase"></i>
+        <span>Información laboral</span>
+      </div>
+
+      <div class="form-grid">
+        <!-- Legajo -->
+        <div class="form-group">
+          <label for="fileNumber">Nro. de Legajo</label>
+          <input
+            pInputText
+            id="fileNumber"
+            [(ngModel)]="formData.fileNumber"
+            placeholder="Ej: L-001"
+            class="w-full"
+            [class.modified-input]="isFieldModified('fileNumber')"
+          />
+        </div>
+
+        <!-- Objetivo -->
+        <div class="form-group">
+          <label for="workplace">Objetivo (Lugar de trabajo)</label>
+          <select
+            id="workplace"
+            [(ngModel)]="formData.workplaceId"
+            class="native-select"
+            [class.modified-input]="isFieldModified('workplaceId')"
+          >
+            <option [ngValue]="null">Sin objetivo asignado</option>
+            <option *ngFor="let wp of workplaceOptions" [ngValue]="wp.value">{{ wp.label }}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="form-actions">
+      <button
+        pButton
+        label="Cancelar"
+        icon="pi pi-times"
+        class="p-button-text btn-cancel"
+        (click)="cancel()"
+        [disabled]="saving"
+      ></button>
+      <button
+        pButton
+        label="Actualizar Vigilador"
+        icon="pi pi-check"
+        class="btn-primary"
+        (click)="saveGuard()"
+        [disabled]="!isFormValid || saving"
+        [loading]="saving"
+      ></button>
+    </div>
+  </div>
+</div>

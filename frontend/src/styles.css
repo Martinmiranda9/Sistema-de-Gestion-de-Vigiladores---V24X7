@@ -218,13 +218,169 @@ a:hover {
 }
 
 /* =========================================
+   SHARED — Page layout
+   ========================================= */
+.page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.page-title {
+  font-size: 1.65rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 0.25rem;
+  font-family: 'Inter', sans-serif;
+}
+
+.page-subtitle {
+  font-size: 0.88rem;
+  color: #64748b;
+  font-weight: 400;
+}
+
+/* =========================================
+   SHARED — Primary button
+   ========================================= */
+.btn-primary {
+  background: #2563eb !important;
+  border-color: #2563eb !important;
+  border-radius: 10px !important;
+  font-weight: 600 !important;
+  font-size: 0.85rem !important;
+  padding: 0.6rem 1.25rem !important;
+  transition: all 0.2s ease !important;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25) !important;
+}
+
+.btn-primary:hover {
+  background: #1d4ed8 !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35) !important;
+}
+
+/* =========================================
+   SHARED — Stat cards
+   ========================================= */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.stat-card {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 1.15rem 1.25rem;
+  border: 1px solid #e8ecf1;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: all 0.25s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+  border-color: transparent;
+}
+
+.stat-card.selected {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2), 0 8px 25px rgba(0, 0, 0, 0.06);
+  transform: translateY(-2px);
+}
+
+.stat-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.stat-total  { background: rgba(37, 99, 235, 0.1);  color: #2563eb; }
+.stat-active { background: rgba(5, 150, 105, 0.1);  color: #059669; }
+.stat-inactive { background: rgba(220, 38, 38, 0.1); color: #dc2626; }
+
+.stat-info { display: flex; flex-direction: column; }
+
+.stat-value {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #0f172a;
+  font-family: 'Inter', sans-serif;
+  line-height: 1.2;
+}
+
+.stat-label {
+  font-size: 0.78rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+/* =========================================
+   SHARED — Status badges
+   ========================================= */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.7rem;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.badge-active  { background: rgba(5, 150, 105, 0.1); color: #059669; }
+.badge-inactive { background: rgba(220, 38, 38, 0.1); color: #dc2626; }
+
+/* =========================================
+   SHARED — Action icon buttons
+   ========================================= */
+.action-btn {
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  font-size: 0.85rem;
+}
+
+.btn-edit { color: #2563eb; }
+.btn-edit:hover { background: rgba(37, 99, 235, 0.08); }
+.btn-delete { color: #dc2626; }
+.btn-delete:hover { background: rgba(220, 38, 38, 0.08); }
+
+/* =========================================
+   SHARED — Dialog cancel button
+   ========================================= */
+.btn-cancel { color: #64748b !important; font-weight: 500 !important; }
+.btn-cancel:hover { background: #f1f5f9 !important; }
+
+/* =========================================
    RESPONSIVE — Breakpoints base
    ========================================= */
-@media (max-width: 768px) {
-  .page-container {
-    padding: 1rem;
-  }
+@media (max-width: 1100px) {
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+}
 
+@media (max-width: 768px) {
+  .page-container { padding: 1rem; }
+  .page-header { flex-direction: column; gap: 0.75rem; }
+  .stats-grid { grid-template-columns: 1fr; }
+  .page-title { font-size: 1.35rem; }
   h1 { font-size: 1.5rem; }
   h2 { font-size: 1.25rem; }
 }

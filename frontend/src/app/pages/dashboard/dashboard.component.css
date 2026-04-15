@@ -124,7 +124,7 @@
   font-size: 1.15rem;
 }
 
-.kpi-trend {
+.kpi-update {
   display: flex;
   align-items: center;
   gap: 0.3rem;
@@ -132,21 +132,6 @@
   font-weight: 600;
   padding: 0.25rem 0.55rem;
   border-radius: 20px;
-}
-
-.trend-up {
-  color: #059669;
-  background: rgba(5, 150, 105, 0.08);
-}
-
-.trend-down {
-  color: #dc2626;
-  background: rgba(220, 38, 38, 0.08);
-}
-
-.trend-neutral {
-  color: #64748b;
-  background: rgba(100, 116, 139, 0.08);
 }
 
 .kpi-value {

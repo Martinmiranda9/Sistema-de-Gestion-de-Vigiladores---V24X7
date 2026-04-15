@@ -1,16 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, Router } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { RippleModule } from 'primeng/ripple';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { SecurityGuardService } from '../../core/services/security-guard.service';
+import { PayrollConfigService } from '../../core/services/payroll-config.service';
 
 interface KpiCard {
   title: string;
   value: string;
   subtitle: string;
   icon: string;
-  trend: 'up' | 'down' | 'neutral';
-  trendValue: string;
+  lastUpdate: Date;
   color: string;
 }
 
@@ -32,53 +32,67 @@ interface QuickAction {
 export class DashboardComponent implements OnInit {
   currentDate = new Date();
 
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(
+    private securityGuardService: SecurityGuardService,
+    private payrollConfigService: PayrollConfigService
+  ) { }
 
   ngOnInit(): void {
-    const token = localStorage.getItem('token') || sessionStorage.getItem('token');
-    
-    if (!token) {
-      this.router.navigate(['/login']);
-      return;
-    }
-
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
-    });
-
-    this.http.get<any[]>('http://localhost:8080/api/SecurityGuards', { headers }).subscribe({
-      next: (guards) => {
+    // 1. Cargar cantidad de vigiladores desde el servicio
+    this.securityGuardService.getActiveGuardsCount().subscribe({
+      next: (count) => {
         const index = this.kpiCards.findIndex(kpi => kpi.title === 'Vigiladores Activos');
         if (index !== -1) {
-          this.kpiCards[index].value = guards.length.toString();
+          this.kpiCards[index].value = count.toString();
         }
       },
-      error: (error) => {
-        console.error('Error al cargar vigiladores', error);
-        if (error.status === 401) {
-          this.router.navigate(['/login']);
+      error: (error) => console.error('Error al cargar vigiladores', error)
+    });
+
+    // 2. Cargar configuraciones de pago desde el servicio
+    this.payrollConfigService.getLatestConfig().subscribe({
+      next: (latestConf) => {
+        if (latestConf) {
+          const updateDate = new Date(latestConf.validFrom);
+
+          const heIndex = this.kpiCards.findIndex(kpi => kpi.title === 'Hora Extra');
+          if (heIndex !== -1) {
+            this.kpiCards[heIndex].value = '$' + latestConf.extraHourRate.toLocaleString('es-AR');
+            this.kpiCards[heIndex].lastUpdate = updateDate;
+          }
+
+          const hnIndex = this.kpiCards.findIndex(kpi => kpi.title === 'Hora Nocturna');
+          if (hnIndex !== -1) {
+            this.kpiCards[hnIndex].value = '$' + latestConf.nightSurchargeRate.toLocaleString('es-AR');
+            this.kpiCards[hnIndex].lastUpdate = updateDate;
+          }
+
+          const hfIndex = this.kpiCards.findIndex(kpi => kpi.title === 'Hora Feriada');
+          if (hfIndex !== -1) {
+            this.kpiCards[hfIndex].value = '$' + latestConf.holidayHourRate.toLocaleString('es-AR');
+            this.kpiCards[hfIndex].lastUpdate = updateDate;
+          }
         }
-      }
+      },
+      error: (error) => console.error('Error al cargar configuraciones de pago', error)
     });
   }
 
   kpiCards: KpiCard[] = [
     {
       title: 'Vigiladores Activos',
-      value: '48',
+      value: '-',
       subtitle: 'Total registrados',
       icon: 'pi pi-users',
-      trend: 'up',
-      trendValue: '+3 este mes',
+      lastUpdate: new Date(),
       color: '#2563eb'
     },
     {
       title: 'Hora Extra',
       value: '$4.850',
       subtitle: 'Valor actual por hora',
-      icon: 'pi pi-clock',
-      trend: 'up',
-      trendValue: '+5.2%',
+      icon: 'pi pi-dollar',
+      lastUpdate: new Date(2026, 3, 1), // 01/04/2026
       color: '#059669'
     },
     {
@@ -86,8 +100,7 @@ export class DashboardComponent implements OnInit {
       value: '$5.620',
       subtitle: 'Valor actual por hora',
       icon: 'pi pi-moon',
-      trend: 'neutral',
-      trendValue: 'Sin cambios',
+      lastUpdate: new Date(2026, 3, 1), // 01/04/2026
       color: '#7c3aed'
     },
     {
@@ -95,8 +108,7 @@ export class DashboardComponent implements OnInit {
       value: '$7.275',
       subtitle: 'Valor actual por hora',
       icon: 'pi pi-star',
-      trend: 'up',
-      trendValue: '+8.1%',
+      lastUpdate: new Date(2026, 3, 1), // 01/04/2026
       color: '#ea580c'
     }
   ];

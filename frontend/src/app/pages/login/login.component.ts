@@ -8,7 +8,7 @@ import { PasswordModule } from 'primeng/password';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
-import { HttpClient } from '@angular/common/http';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -33,9 +33,9 @@ export class LoginComponent {
   loading = false;
 
   constructor(
-    private http: HttpClient,
     private router: Router,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private authService: AuthService
   ) {}
 
   onLogin(): void {
@@ -50,18 +50,13 @@ export class LoginComponent {
 
     this.loading = true;
 
-    this.http.post<any>('http://localhost:8080/api/Auth/login', {
+    this.authService.login({
       username: this.username,
       password: this.password
     }).subscribe({
       next: (response) => {
         this.loading = false;
-        // Guardar token
-        if (this.rememberMe) {
-          localStorage.setItem('token', response.token);
-        } else {
-          sessionStorage.setItem('token', response.token);
-        }
+        this.authService.saveToken(response.token, this.rememberMe);
         this.messageService.add({
           severity: 'success',
           summary: '¡Bienvenido!',

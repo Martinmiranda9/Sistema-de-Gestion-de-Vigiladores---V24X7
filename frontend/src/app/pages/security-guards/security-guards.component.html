@@ -1,0 +1,182 @@
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>
+
+<div class="guards-page">
+  <!-- Header -->
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Vigiladores</h1>
+      <p class="page-subtitle">Gestión completa del personal de vigilancia</p>
+    </div>
+    <button pButton
+      icon="pi pi-plus"
+      label="Nuevo Vigilador"
+      class="btn-primary"
+      (click)="openNewDialog()">
+    </button>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="stats-grid">
+    <div class="stat-card" [class.selected]="statusFilter === 'all'" (click)="filterByStatus('all')" style="cursor: pointer;">
+      <div class="stat-icon stat-total">
+        <i class="pi pi-users"></i>
+      </div>
+      <div class="stat-info">
+        <span class="stat-value">{{ totalGuards }}</span>
+        <span class="stat-label">Total Vigiladores</span>
+      </div>
+    </div>
+    <div class="stat-card" [class.selected]="statusFilter === 'active'" (click)="filterByStatus('active')" style="cursor: pointer;">
+      <div class="stat-icon stat-active">
+        <i class="pi pi-check-circle"></i>
+      </div>
+      <div class="stat-info">
+        <span class="stat-value">{{ activeGuards }}</span>
+        <span class="stat-label">Activos</span>
+      </div>
+    </div>
+    <div class="stat-card" [class.selected]="statusFilter === 'inactive'" (click)="filterByStatus('inactive')" style="cursor: pointer;">
+      <div class="stat-icon stat-inactive">
+        <i class="pi pi-times-circle"></i>
+      </div>
+      <div class="stat-info">
+        <span class="stat-value">{{ inactiveGuards }}</span>
+        <span class="stat-label">Inactivos</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="table-container">
+    <div class="table-header">
+      <div class="table-title">
+        <i class="pi pi-list"></i>
+        <span>Listado de Vigiladores</span>
+      </div>
+      <div class="table-actions">
+        <p-iconfield iconPosition="left">
+          <p-inputicon styleClass="pi pi-search"></p-inputicon>
+          <input
+            pInputText
+            type="text"
+            placeholder="Buscar por nombre, DNI o legajo..."
+            (input)="onSearch($event)"
+            class="search-input"
+          />
+        </p-iconfield>
+      </div>
+    </div>
+
+    <!-- Loading state -->
+    <div class="loading-state" *ngIf="loading">
+      <i class="pi pi-spin pi-spinner"></i>
+      <span>Cargando vigiladores...</span>
+    </div>
+
+    <!-- Data Table -->
+    <div class="table-wrapper" *ngIf="!loading">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th class="sortable" (click)="sortBy('lastName')">
+              Nombre Completo
+              <i class="pi sort-icon" [ngClass]="{
+                'pi-sort-alt': sortField !== 'lastName',
+                'pi-sort-amount-up': sortField === 'lastName' && sortOrder === 'asc',
+                'pi-sort-amount-down': sortField === 'lastName' && sortOrder === 'desc'
+              }"></i>
+            </th>
+            <th class="sortable" (click)="sortBy('dni')">
+              DNI
+              <i class="pi sort-icon" [ngClass]="{
+                'pi-sort-alt': sortField !== 'dni',
+                'pi-sort-amount-up': sortField === 'dni' && sortOrder === 'asc',
+                'pi-sort-amount-down': sortField === 'dni' && sortOrder === 'desc'
+              }"></i>
+            </th>
+            <th class="sortable" (click)="sortBy('fileNumber')">
+              Legajo
+              <i class="pi sort-icon" [ngClass]="{
+                'pi-sort-alt': sortField !== 'fileNumber',
+                'pi-sort-amount-up': sortField === 'fileNumber' && sortOrder === 'asc',
+                'pi-sort-amount-down': sortField === 'fileNumber' && sortOrder === 'desc'
+              }"></i>
+            </th>
+            <th class="sortable" (click)="sortBy('workplaceName')">
+              Objetivo
+              <i class="pi sort-icon" [ngClass]="{
+                'pi-sort-alt': sortField !== 'workplaceName',
+                'pi-sort-amount-up': sortField === 'workplaceName' && sortOrder === 'asc',
+                'pi-sort-amount-down': sortField === 'workplaceName' && sortOrder === 'desc'
+              }"></i>
+            </th>
+            <th>Estado</th>
+            <th class="th-actions">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let guard of paginatedGuards" class="data-row">
+            <td>
+              <div class="guard-name">
+                <div class="guard-avatar" [style.background]="guard.isActive ? '#2563eb14' : '#94a3b814'">
+                  <span [style.color]="guard.isActive ? '#2563eb' : '#94a3b8'">
+                    {{ guard.firstName.charAt(0) }}{{ guard.lastName.charAt(0) }}
+                  </span>
+                </div>
+                <span class="name-text">{{ guard.lastName }}, {{ guard.firstName }}</span>
+              </div>
+            </td>
+            <td><span class="cell-text">{{ guard.dni }}</span></td>
+            <td><span class="cell-text">{{ guard.fileNumber || '—' }}</span></td>
+            <td><span class="cell-text">{{ guard.workplaceName || 'Sin asignar' }}</span></td>
+            <td>
+              <span class="status-badge" [ngClass]="guard.isActive ? 'badge-active' : 'badge-inactive'">
+                {{ guard.isActive ? 'Activo' : 'Inactivo' }}
+              </span>
+            </td>
+            <td>
+              <div class="action-buttons">
+                <button class="action-btn btn-edit" (click)="openEditDialog(guard)" pTooltip="Editar" tooltipPosition="top">
+                  <i class="pi pi-pencil"></i>
+                </button>
+                <button class="action-btn btn-delete" (click)="confirmDelete(guard)" pTooltip="Eliminar" tooltipPosition="top">
+                  <i class="pi pi-trash"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Empty state -->
+      <div class="empty-state" *ngIf="filteredGuards.length === 0">
+        <i class="pi pi-inbox"></i>
+        <span>No se encontraron vigiladores</span>
+      </div>
+
+      <!-- Pagination -->
+      <div class="pagination" *ngIf="filteredGuards.length > 0">
+        <span class="pagination-info">
+          Mostrando {{ showingFrom }} a {{ showingTo }} de {{ filteredGuards.length }} vigiladores
+        </span>
+        <div class="pagination-controls">
+          <button class="page-btn" [disabled]="currentPage === 1" (click)="goToPage(currentPage - 1)">
+            <i class="pi pi-chevron-left"></i>
+          </button>
+          <button
+            *ngFor="let page of pageNumbers"
+            class="page-btn"
+            [class.active]="page === currentPage"
+            (click)="goToPage(page)"
+          >
+            {{ page }}
+          </button>
+          <button class="page-btn" [disabled]="currentPage === totalPages" (click)="goToPage(currentPage + 1)">
+            <i class="pi pi-chevron-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
