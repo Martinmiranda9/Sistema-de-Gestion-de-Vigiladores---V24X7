@@ -5,6 +5,8 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { SecurityGuardsComponent } from './pages/security-guards/security-guards.component';
 import { AddSecurityGuardComponent } from './pages/security-guards/add-security-guard/add-security-guard.component';
 import { EditSecurityGuardComponent } from './pages/security-guards/edit-security-guard/edit-security-guard.component';
+import { WorkplacesListComponent } from './pages/workplaces/workplaces-list/workplaces-list.component';
+import { WorkplaceFormComponent } from './pages/workplaces/workplace-form/workplace-form.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -16,6 +18,9 @@ export const routes: Routes = [
       { path: 'vigiladores', component: SecurityGuardsComponent },
       { path: 'vigiladores/nuevo', component: AddSecurityGuardComponent },
       { path: 'vigiladores/editar/:id', component: EditSecurityGuardComponent },
+      { path: 'objetivos', component: WorkplacesListComponent },
+      { path: 'objetivos/nuevo', component: WorkplaceFormComponent },
+      { path: 'objetivos/editar/:id', component: WorkplaceFormComponent },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },

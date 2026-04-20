@@ -1,0 +1,110 @@
+<p-toast></p-toast>
+
+<div class="form-page">
+  <!-- Breadcrumb -->
+  <p-breadcrumb [model]="breadcrumbItems" [home]="breadcrumbHome" styleClass="custom-breadcrumb"></p-breadcrumb>
+
+  <!-- Page Header -->
+  <div class="form-header">
+    <div class="header-left">
+      <div class="header-icon">
+        <i [class]="isEditing ? 'pi pi-pencil' : 'pi pi-plus'"></i>
+      </div>
+      <div>
+        <h1 class="page-title">{{ isEditing ? 'Editar Objetivo' : 'Nuevo Objetivo' }}</h1>
+        <p class="page-subtitle">
+          {{ isEditing ? 'Modificá los datos del objetivo seleccionado. Los cambios se marcarán.' : 'Completá los datos para registrar un lugar de trabajo en el sistema.' }}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main loading spinner -->
+  <div class="loading-state" *ngIf="loadingData">
+    <p-progressSpinner styleClass="w-3rem h-3rem" strokeWidth="6" fill="var(--surface-ground)" animationDuration=".5s"></p-progressSpinner>
+    <span class="ml-3 font-medium text-500">Cargando información...</span>
+  </div>
+
+  <!-- Form Card -->
+  <div class="form-card" *ngIf="!loadingData">
+    <div class="card-section">
+      <div class="section-top">
+        <div class="section-label">
+          <i class="pi pi-building"></i>
+          <span>Datos del lugar</span>
+        </div>
+        
+        <!-- Status Toggle (Only visible and applicable in Edit Mode) -->
+        <div class="status-toggle-wrapper" *ngIf="isEditing">
+          <span class="text-sm font-semibold text-700 mr-2">Estado:</span>
+          <span
+            class="status-badge"
+            [ngClass]="formData.isActive ? 'badge-active' : 'badge-inactive'"
+            [class.modified-status]="isFieldModified('isActive')"
+            (click)="formData.isActive = !formData.isActive"
+            style="cursor: pointer; user-select: none;"
+          >
+            {{ formData.isActive ? 'Activo' : 'Inactivo' }}
+          </span>
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <!-- Nombre -->
+        <div class="form-group">
+          <label for="name">Nombre <span class="required">*</span></label>
+          <input
+            pInputText
+            id="name"
+            [(ngModel)]="formData.name"
+            placeholder="Ej: Barrio San José"
+            class="w-full"
+            [class.ng-invalid]="!formData.name.trim()"
+            [class.modified-input]="isFieldModified('name')"
+          />
+        </div>
+
+        <!-- Dirección -->
+        <div class="form-group address-group">
+          <label for="address">Dirección completa <span class="required">*</span></label>
+          <input
+            pInputText
+            id="address"
+            [(ngModel)]="formData.address"
+            placeholder="Ej: Av. Libertador 1234, CABA"
+            class="w-full"
+            [class.ng-invalid]="!formData.address.trim()"
+            [class.modified-input]="isFieldModified('address')"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- Info note -->
+    <div class="info-note" *ngIf="!isEditing">
+      <i class="pi pi-info-circle"></i>
+      <span>El objetivo se registrará con estado <strong>Activo</strong> por defecto. Podés cambiarlo después desde la edición.</span>
+    </div>
+
+    <!-- Actions -->
+    <div class="form-actions">
+      <button
+        pButton
+        label="Cancelar"
+        icon="pi pi-times"
+        class="p-button-text btn-cancel"
+        (click)="cancel()"
+        [disabled]="saving"
+      ></button>
+      <button
+        pButton
+        [label]="isEditing ? 'Actualizar Objetivo' : 'Registrar Objetivo'"
+        icon="pi pi-check"
+        class="btn-primary"
+        (click)="saveWorkplace()"
+        [disabled]="!isFormValid || saving"
+        [loading]="saving"
+      ></button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,139 @@
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>
+
+<div class="workplaces-page">
+  <!-- Header -->
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Objetivos</h1>
+      <p class="page-subtitle">Administrá los lugares de trabajo donde se asignan los vigiladores</p>
+    </div>
+    <button pButton icon="pi pi-plus" label="Nuevo Objetivo" class="btn-primary" (click)="goToNew()">
+    </button>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="stats-grid">
+    <div class="stat-card" [class.selected]="statusFilter === 'all'" (click)="filterByStatus('all')"
+      style="cursor: pointer;">
+      <div class="stat-icon stat-total">
+        <i class="pi pi-briefcase"></i>
+      </div>
+      <div class="stat-info">
+        <span class="stat-value">{{ totalWorkplaces }}</span>
+        <span class="stat-label">Total Objetivos</span>
+      </div>
+    </div>
+    <div class="stat-card" [class.selected]="statusFilter === 'active'" (click)="filterByStatus('active')"
+      style="cursor: pointer;">
+      <div class="stat-icon stat-active">
+        <i class="pi pi-check-circle"></i>
+      </div>
+      <div class="stat-info">
+        <span class="stat-value">{{ activeCount }}</span>
+        <span class="stat-label">Activos</span>
+      </div>
+    </div>
+    <div class="stat-card" [class.selected]="statusFilter === 'inactive'" (click)="filterByStatus('inactive')"
+      style="cursor: pointer;">
+      <div class="stat-icon stat-inactive">
+        <i class="pi pi-times-circle"></i>
+      </div>
+      <div class="stat-info">
+        <span class="stat-value">{{ inactiveCount }}</span>
+        <span class="stat-label">Inactivos</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="table-container">
+    <div class="table-header">
+      <div class="table-title">
+        <i class="pi pi-list"></i>
+        <span>Listado de Objetivos</span>
+      </div>
+      <div class="table-actions">
+        <p-iconfield iconPosition="left">
+          <p-inputicon styleClass="pi pi-search"></p-inputicon>
+          <input pInputText type="text" [(ngModel)]="searchText" (input)="applyFilter()"
+            placeholder="Buscar por nombre o dirección..." class="search-input" />
+        </p-iconfield>
+      </div>
+    </div>
+
+    <!-- Loading state -->
+    <div class="loading-state" *ngIf="loading">
+      <i class="pi pi-spin pi-spinner"></i>
+      <span>Cargando objetivos...</span>
+    </div>
+
+    <!-- Data Table -->
+    <div class="table-wrapper" *ngIf="!loading">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Dirección</th>
+            <th>Estado</th>
+            <th class="th-actions">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let wp of paginatedWorkplaces" class="data-row">
+            <td>
+              <div class="guard-name">
+                <div class="guard-avatar" [style.background]="wp.isActive ? '#2563eb14' : '#94a3b814'">
+                  <i class="pi pi-map-marker" [style.color]="wp.isActive ? '#2563eb' : '#94a3b8'"></i>
+                </div>
+                <span class="name-text">{{ wp.name }}</span>
+              </div>
+            </td>
+            <td><span class="cell-text">{{ wp.address || 'Sin dirección' }}</span></td>
+            <td>
+              <span class="status-badge" [ngClass]="wp.isActive ? 'badge-active' : 'badge-inactive'">
+                {{ wp.isActive ? 'Activo' : 'Inactivo' }}
+              </span>
+            </td>
+            <td>
+              <div class="action-buttons">
+                <button class="action-btn btn-edit" (click)="goToEdit(wp)" pTooltip="Editar" tooltipPosition="top">
+                  <i class="pi pi-pencil"></i>
+                </button>
+                <button class="action-btn btn-delete" (click)="confirmDelete(wp)" pTooltip="Eliminar"
+                  tooltipPosition="top">
+                  <i class="pi pi-trash"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Empty state -->
+      <div class="empty-state" *ngIf="filteredWorkplaces.length === 0">
+        <i class="pi pi-inbox"></i>
+        <span>No se encontraron objetivos</span>
+      </div>
+
+      <!-- Pagination -->
+      <div class="pagination" *ngIf="filteredWorkplaces.length > 0">
+        <span class="pagination-info">
+          Mostrando {{ showingFrom }} a {{ showingTo }} de {{ filteredWorkplaces.length }} objetivos
+        </span>
+        <div class="pagination-controls" *ngIf="totalPages > 1">
+          <button class="page-btn" [disabled]="currentPage === 1" (click)="goToPage(currentPage - 1)">
+            <i class="pi pi-chevron-left"></i>
+          </button>
+          <button *ngFor="let page of pageNumbers" class="page-btn" [class.active]="page === currentPage"
+            (click)="goToPage(page)">
+            {{ page }}
+          </button>
+          <button class="page-btn" [disabled]="currentPage === totalPages" (click)="goToPage(currentPage + 1)">
+            <i class="pi pi-chevron-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
