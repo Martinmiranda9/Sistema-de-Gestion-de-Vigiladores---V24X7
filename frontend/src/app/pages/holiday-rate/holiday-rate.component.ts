@@ -170,10 +170,12 @@ export class HolidayRateComponent implements OnInit {
   }
 
   formatHolidayDate(date: string): string {
-    return new Intl.DateTimeFormat('es-AR', { day: '2-digit', month: 'long' }).format(new Date(date + 'T12:00:00'));
+    const onlyDate = date.split('T')[0];
+    return new Intl.DateTimeFormat('es-AR', { day: '2-digit', month: 'long' }).format(new Date(onlyDate + 'T12:00:00'));
   }
 
   isPast(date: string): boolean {
-    return new Date(date + 'T23:59:59') < new Date();
+    const onlyDate = date.split('T')[0];
+    return new Date(onlyDate + 'T23:59:59') < new Date();
   }
 }

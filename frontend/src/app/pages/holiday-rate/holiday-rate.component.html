@@ -76,38 +76,49 @@
   [(visible)]="holidayDialogVisible"
   [modal]="true"
   [draggable]="false"
-  [header]="editingHoliday ? 'Editar feriado' : 'Nuevo feriado'"
-  [style]="{width: '440px'}"
-  styleClass="overtime-dialog">
+  [closable]="true"
+  [showHeader]="false"
+  [style]="{width: '480px'}"
+  styleClass="premium-dialog">
 
-  <div class="dialog-form">
-    <div class="form-group">
-      <label>Fecha <span class="required">*</span></label>
-      <p-datepicker
-        [(ngModel)]="holidayDate"
-        dateFormat="dd/mm/yy"
-        placeholder="Seleccioná la fecha del feriado"
-        styleClass="w-full"
-        [showIcon]="true">
-      </p-datepicker>
+  <div class="dlg-header">
+    <div class="dlg-header-left">
+      <div class="dlg-icon-badge"><i class="pi pi-calendar-plus"></i></div>
+      <div>
+        <h3 class="dlg-title">{{ editingHoliday ? 'Editar feriado' : 'Nuevo feriado' }}</h3>
+        <p class="dlg-subtitle">{{ editingHoliday ? 'Modificá los datos del feriado' : 'Agregá un feriado al calendario' }}</p>
+      </div>
     </div>
-    <div class="form-group">
-      <label>Descripción <span class="required">*</span></label>
+    <button class="dlg-close" (click)="holidayDialogVisible = false"><i class="pi pi-times"></i></button>
+  </div>
+
+  <div class="dlg-form">
+    <div class="dlg-form-group">
+      <label class="dlg-label"><i class="pi pi-calendar"></i> Fecha <span class="required">*</span></label>
+      <p-datepicker [(ngModel)]="holidayDate" dateFormat="dd/mm/yy"
+        placeholder="Seleccioná la fecha del feriado" styleClass="w-full"
+        [showIcon]="true" [appendTo]="'body'"></p-datepicker>
+    </div>
+    <div class="dlg-form-group">
+      <label class="dlg-label"><i class="pi pi-tag"></i> Descripción <span class="required">*</span></label>
       <input pInputText [(ngModel)]="holidayForm.description"
-        placeholder="Ej: Día de la Independencia" class="w-full" />
+        placeholder="Ej: Día de la Independencia" class="w-full dlg-input" />
     </div>
-    <div class="form-group-check">
+    <div class="dlg-check-group">
       <p-checkbox [(ngModel)]="holidayForm.isRecurring" [binary]="true" inputId="recurring"></p-checkbox>
-      <label for="recurring" class="check-label">Se repite todos los años</label>
+      <label for="recurring" class="dlg-check-label">
+        <span>Se repite todos los años</span>
+        <span class="dlg-check-hint">Se creará automáticamente cada año</span>
+      </label>
     </div>
   </div>
 
-  <ng-template pTemplate="footer">
-    <div class="dialog-footer">
-      <button pButton label="Cancelar" class="p-button-text btn-cancel" (click)="holidayDialogVisible = false"></button>
-      <button pButton [label]="editingHoliday ? 'Guardar' : 'Agregar'" icon="pi pi-check" class="btn-primary"
-        [loading]="savingHoliday" [disabled]="!holidayDate || !holidayForm.description.trim()"
-        (click)="saveHoliday()"></button>
-    </div>
-  </ng-template>
+  <div class="dlg-footer">
+    <button pButton label="Cancelar" icon="pi pi-times" class="p-button-text btn-cancel"
+      (click)="holidayDialogVisible = false"></button>
+    <button pButton [label]="editingHoliday ? 'Guardar cambios' : 'Agregar feriado'"
+      [icon]="editingHoliday ? 'pi pi-save' : 'pi pi-plus'" class="btn-primary"
+      [loading]="savingHoliday" [disabled]="!holidayDate || !holidayForm.description.trim()"
+      (click)="saveHoliday()"></button>
+  </div>
 </p-dialog>
