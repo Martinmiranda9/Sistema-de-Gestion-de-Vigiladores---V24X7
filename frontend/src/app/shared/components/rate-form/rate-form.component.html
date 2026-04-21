@@ -1,0 +1,103 @@
+<p-toast></p-toast>
+
+<div class="add-guard-page">
+  <!-- Breadcrumb -->
+  <p-breadcrumb [model]="breadcrumbItems" [home]="breadcrumbHome" styleClass="custom-breadcrumb"></p-breadcrumb>
+
+  <!-- Page Header -->
+  <div class="form-header">
+    <div class="header-left">
+      <div class="header-icon">
+        <i [class]="headerIcon"></i>
+      </div>
+      <div>
+        <h1 class="page-title">{{ pageTitle }}</h1>
+        <p class="page-subtitle">{{ pageSubtitle }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Form Card -->
+  <div class="form-card">
+    <div class="card-section">
+      <div class="section-label">
+        <i class="pi pi-dollar"></i>
+        <span>Valores y Vigencia</span>
+      </div>
+
+      <div class="form-grid">
+        <!-- Valor por hora -->
+        <div class="form-group">
+          <label for="rate">Nuevo valor por {{ rateLabel }} <span class="required">*</span></label>
+          <p-inputNumber
+            id="rate"
+            [(ngModel)]="formData.rate"
+            mode="currency"
+            currency="ARS"
+            locale="es-AR"
+            [min]="0.01"
+            placeholder="$0,00"
+            styleClass="w-full"
+            [ngClass]="{'ng-invalid ng-dirty': formData.rate === 0}">
+          </p-inputNumber>
+        </div>
+
+        <!-- Fecha de vigencia (solo si es programar) -->
+        <div class="form-group" *ngIf="mode === 'programar'">
+          <label for="validFrom">Fecha de vigencia <span class="required">*</span></label>
+          <p-datepicker
+            id="validFrom"
+            [(ngModel)]="formData.validFrom"
+            [minDate]="minDate"
+            dateFormat="dd/mm/yy"
+            placeholder="Seleccioná una fecha futura"
+            styleClass="w-full"
+            [showIcon]="true">
+          </p-datepicker>
+        </div>
+      </div>
+    </div>
+
+    <p-divider></p-divider>
+
+    <div class="card-section">
+      <div class="section-label">
+        <i class="pi pi-clipboard"></i>
+        <span>Información de Auditoría</span>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="reason">Motivo del cambio</label>
+          <input pInputText id="reason" [(ngModel)]="formData.reason"
+            placeholder="Ej: Acuerdo paritario Abril 2026" class="w-full" />
+        </div>
+        <div class="form-group">
+          <label for="changedBy">Registrado por</label>
+          <input pInputText id="changedBy" [(ngModel)]="formData.changedBy"
+            placeholder="Nombre del responsable" class="w-full" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Info note -->
+    <div class="info-note" *ngIf="mode === 'actualizar'">
+      <i class="pi pi-info-circle"></i>
+      <span>Se creará un nuevo registro con vigencia <strong>desde hoy</strong>. El valor actual pasará automáticamente al historial.</span>
+    </div>
+    <div class="info-note" *ngIf="mode === 'programar'">
+      <i class="pi pi-info-circle"></i>
+      <span>El sistema aplicará este valor automáticamente en la <strong>fecha programada</strong>.</span>
+    </div>
+
+    <!-- Actions -->
+    <div class="form-actions">
+      <button pButton label="Cancelar" icon="pi pi-times" class="p-button-text btn-cancel"
+        (click)="cancel()" [disabled]="saving"></button>
+      <button pButton
+        [label]="mode === 'actualizar' ? 'Guardar Cambios' : 'Programar Aumento'"
+        [icon]="mode === 'actualizar' ? 'pi pi-check' : 'pi pi-calendar-plus'"
+        class="btn-primary" (click)="save()" [disabled]="!isFormValid || saving" [loading]="saving"></button>
+    </div>
+  </div>
+</div>

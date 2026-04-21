@@ -50,8 +50,19 @@ export class DashboardComponent implements OnInit {
     });
 
     // 2. Cargar configuraciones de pago desde el servicio
-    this.payrollConfigService.getLatestConfig().subscribe({
-      next: (latestConf) => {
+    this.payrollConfigService.getAll().subscribe({
+      next: (configs) => {
+        const today = new Date();
+        const latestConf = configs
+          .filter(c => new Date(c.validFrom) <= today)
+          .sort((a, b) => {
+            const validDiff = new Date(b.validFrom).getTime() - new Date(a.validFrom).getTime();
+            if (validDiff === 0) {
+              return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+            }
+            return validDiff;
+          })[0];
+
         if (latestConf) {
           const updateDate = new Date(latestConf.validFrom);
 
@@ -74,7 +85,7 @@ export class DashboardComponent implements OnInit {
           }
         }
       },
-      error: (error) => console.error('Error al cargar configuraciones de pago', error)
+      error: (error: unknown) => console.error('Error al cargar configuraciones de pago', error)
     });
   }
 

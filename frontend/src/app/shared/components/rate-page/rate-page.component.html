@@ -1,0 +1,184 @@
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>
+
+<div class="overtime-page">
+
+  <!-- ══ HEADER ══════════════════════════════════════════════════════════════ -->
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">{{ pageTitle }}</h1>
+      <p class="page-subtitle">{{ pageSubtitle }}</p>
+    </div>
+  </div>
+
+  <!-- ══ LOADING ═════════════════════════════════════════════════════════════ -->
+  <div class="loading-state" *ngIf="loading">
+    <i class="pi pi-spin pi-spinner"></i>
+    <span>Cargando configuración...</span>
+  </div>
+
+  <ng-container *ngIf="!loading">
+
+    <!-- ══ CONTENT PROJECTION: Cards extra antes del top-row ══════════════ -->
+    <ng-content select="[slot=before-cards]"></ng-content>
+
+    <!-- ══ TOP ROW ═══════════════════════════════════════════════════════ -->
+    <div class="top-row">
+
+      <!-- CARD — Valor actual -->
+      <div class="info-card current-card">
+        <div class="card-header">
+          <div class="card-icon-wrap icon-blue">
+            <i [class]="iconClass"></i>
+          </div>
+          <div>
+            <div class="card-label">Valor actual por {{ rateLabel }}</div>
+            <div class="card-sublabel" *ngIf="currentConfig">
+              Vigente desde {{ formatDate(currentConfig.validFrom) }}
+            </div>
+          </div>
+        </div>
+
+        <div class="rate-display" *ngIf="currentConfig; else noConfig">
+          {{ formatCurrency(getRate(currentConfig)) }}
+        </div>
+        <ng-template #noConfig>
+          <div class="no-data">Sin configuración cargada</div>
+        </ng-template>
+
+        <div class="card-footer">
+          <button pButton label="Actualizar valor" icon="pi pi-pencil" class="btn-primary btn-sm"
+            [routerLink]="[updateRoute]">
+          </button>
+        </div>
+      </div>
+
+      <!-- CARD — Próximo aumento -->
+      <div class="info-card upcoming-card">
+        <div class="card-header">
+          <div class="card-icon-wrap icon-green">
+            <i class="pi pi-calendar-plus"></i>
+          </div>
+          <div>
+            <div class="card-label">Próximo aumento programado</div>
+            <div class="card-sublabel" *ngIf="upcoming">
+              En {{ daysUntil(upcoming.validFrom) }} días
+            </div>
+          </div>
+        </div>
+
+        <div class="rate-display upcoming-rate" *ngIf="upcoming; else noUpcoming">
+          {{ formatCurrency(getRate(upcoming)) }}
+          <div class="upcoming-date">A partir del {{ formatDate(upcoming.validFrom) }}</div>
+        </div>
+        <ng-template #noUpcoming>
+          <div class="no-data">No hay aumento programado</div>
+        </ng-template>
+
+        <div class="card-footer card-footer-split">
+          <button pButton label="Programar aumento" icon="pi pi-plus" class="btn-primary btn-sm"
+            [routerLink]="[scheduleRoute]">
+          </button>
+          <button *ngIf="upcoming" pButton label="Cancelar aumento" icon="pi pi-times-circle"
+            class="p-button-outlined p-button-danger btn-sm btn-cancel-upcoming"
+            (click)="confirmCancelUpcoming()">
+          </button>
+        </div>
+      </div>
+
+      <!-- CARD — Calculadora -->
+      <div class="info-card sim-card">
+        <div class="card-header">
+          <div class="card-icon-wrap icon-purple">
+            <i class="pi pi-calculator"></i>
+          </div>
+          <div>
+            <div class="card-label">Calculadora rápida</div>
+            <div class="card-sublabel">{{ simLabel }}</div>
+          </div>
+        </div>
+
+        <div class="sim-body">
+          <div class="sim-field">
+            <label class="sim-label">Horas trabajadas</label>
+            <p-inputNumber [(ngModel)]="simHours" [min]="0" [max]="999" [showButtons]="true" suffix=" hs"
+              styleClass="sim-input" (onInput)="calculate()" (onButtonClick)="calculate()">
+            </p-inputNumber>
+          </div>
+          <div class="sim-result" *ngIf="simHours > 0">
+            <span class="sim-result-label">Total estimado</span>
+            <span class="sim-result-value">{{ formatCurrency(simResult) }}</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ══ CONTENT PROJECTION: Cards extra después del top-row ═══════════ -->
+    <ng-content select="[slot=after-cards]"></ng-content>
+
+    <!-- ══ TIMELINE — Historial ═════════════════════════════════════════ -->
+    <div class="table-container">
+      <div class="table-header">
+        <div class="table-title">
+          <i class="pi pi-history"></i>
+          <span>Historial & Auditoría</span>
+        </div>
+      </div>
+
+      <div class="timeline-wrapper" *ngIf="history.length > 0; else emptyHistory">
+        <p-timeline [value]="history" layout="vertical" align="left">
+          <ng-template pTemplate="opposite" let-event>
+            <div class="tl-date">
+              <div class="tl-date-main">{{ formatDate(event.validFrom) }}</div>
+              <div class="tl-date-sub">Registrado el {{ formatDate(event.createdAt) }}</div>
+            </div>
+          </ng-template>
+
+          <ng-template pTemplate="marker" let-event>
+            <div class="tl-marker" [class.marker-current]="event.isCurrent" [class.marker-upcoming]="event.isUpcoming"
+              [class.marker-past]="!event.isCurrent && !event.isUpcoming">
+              <i class="pi" [class.pi-star-fill]="event.isCurrent" [class.pi-arrow-up]="event.isUpcoming"
+                [class.pi-check]="!event.isCurrent && !event.isUpcoming">
+              </i>
+            </div>
+          </ng-template>
+
+          <ng-template pTemplate="content" let-event>
+            <div class="tl-card">
+              <div class="tl-card-top">
+                <div class="tl-rate">{{ formatCurrency(event.rate) }}/h</div>
+                <div class="tl-badges">
+                  <span class="status-badge badge-active" *ngIf="event.isCurrent">Vigente</span>
+                  <span class="status-badge badge-upcoming" *ngIf="event.isUpcoming">Próximo</span>
+                  <span class="status-badge badge-inactive"
+                    *ngIf="!event.isCurrent && !event.isUpcoming">Histórico</span>
+                </div>
+              </div>
+              <div class="tl-meta" *ngIf="event.reason || event.changedBy">
+                <span *ngIf="event.reason" class="tl-reason">
+                  <i class="pi pi-comment"></i> {{ event.reason }}
+                </span>
+                <span *ngIf="event.changedBy" class="tl-author">
+                  <i class="pi pi-user"></i> {{ event.changedBy }}
+                </span>
+              </div>
+              <button *ngIf="!event.isCurrent" class="action-btn btn-delete tl-delete" (click)="confirmDelete(event)"
+                pTooltip="Eliminar" tooltipPosition="left" [tooltipOptions]="{ showDelay: 150 }">
+                <i class="pi pi-trash"></i>
+              </button>
+            </div>
+          </ng-template>
+        </p-timeline>
+      </div>
+
+      <ng-template #emptyHistory>
+        <div class="empty-state">
+          <i class="pi pi-inbox"></i>
+          <span>No hay registros históricos aún</span>
+        </div>
+      </ng-template>
+    </div>
+
+  </ng-container>
+</div>

@@ -8,4 +8,7 @@ public class PayrollConfigDTO
     public decimal HolidayHourRate { get; set; }
     public decimal ExtraHourRate { get; set; }
     public DateTime ValidFrom { get; set; }
+    public string? Reason { get; set; }
+    public string? ChangedBy { get; set; }
+    public DateTime CreatedAt { get; set; }
 }

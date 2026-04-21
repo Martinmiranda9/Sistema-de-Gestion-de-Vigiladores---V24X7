@@ -7,6 +7,10 @@ import { AddSecurityGuardComponent } from './pages/security-guards/add-security-
 import { EditSecurityGuardComponent } from './pages/security-guards/edit-security-guard/edit-security-guard.component';
 import { WorkplacesListComponent } from './pages/workplaces/workplaces-list/workplaces-list.component';
 import { WorkplaceFormComponent } from './pages/workplaces/workplace-form/workplace-form.component';
+import { OvertimeComponent } from './pages/overtime/overtime.component';
+import { NightRateComponent } from './pages/night-rate/night-rate.component';
+import { HolidayRateComponent } from './pages/holiday-rate/holiday-rate.component';
+import { RateFormComponent } from './shared/components/rate-form/rate-form.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -21,6 +25,18 @@ export const routes: Routes = [
       { path: 'objetivos', component: WorkplacesListComponent },
       { path: 'objetivos/nuevo', component: WorkplaceFormComponent },
       { path: 'objetivos/editar/:id', component: WorkplaceFormComponent },
+      // Liquidación — Hora Extra
+      { path: 'horas-extras', component: OvertimeComponent },
+      { path: 'horas-extras/actualizar', component: RateFormComponent },
+      { path: 'horas-extras/programar', component: RateFormComponent },
+      // Liquidación — Hora Nocturna
+      { path: 'hora-nocturna', component: NightRateComponent },
+      { path: 'hora-nocturna/actualizar', component: RateFormComponent },
+      { path: 'hora-nocturna/programar', component: RateFormComponent },
+      // Liquidación — Hora Feriada
+      { path: 'hora-feriada', component: HolidayRateComponent },
+      { path: 'hora-feriada/actualizar', component: RateFormComponent },
+      { path: 'hora-feriada/programar', component: RateFormComponent },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },

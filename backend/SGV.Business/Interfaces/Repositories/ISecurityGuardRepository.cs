@@ -9,5 +9,6 @@ public interface ISecurityGuardRepository
     Task<IEnumerable<SecurityGuard>> GetByWorkplaceAsync(int workplaceId);
     Task<bool> ExistsByDNIAsync(string dni, int? excludeId = null);
     Task AddAsync(SecurityGuard securityGuard);
+    void Remove(SecurityGuard securityGuard);
     Task SaveChangesAsync();
 }

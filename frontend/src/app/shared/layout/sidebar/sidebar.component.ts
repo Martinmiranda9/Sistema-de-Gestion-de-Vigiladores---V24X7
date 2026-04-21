@@ -39,7 +39,7 @@ export class SidebarComponent {
     {
       title: 'Planilla',
       items: [
-        { label: 'Horas Extras', icon: 'pi pi-clock', route: '/horas-extras' },
+        { label: 'Horas Extras', icon: 'pi pi-clock', route: '/planilla/horas-extras' },
         { label: 'Calendario', icon: 'pi pi-calendar', route: '/calendario' },
         { label: 'Histórico', icon: 'pi pi-history', route: '/historico' },
       ]
@@ -47,7 +47,7 @@ export class SidebarComponent {
     {
       title: 'Liquidación',
       items: [
-        { label: 'Hora Extra', icon: 'pi pi-dollar', route: '/hora-extra' },
+        { label: 'Hora Extra', icon: 'pi pi-dollar', route: '/horas-extras' },
         { label: 'Hora Nocturna', icon: 'pi pi-moon', route: '/hora-nocturna' },
         { label: 'Hora Feriada', icon: 'pi pi-star', route: '/hora-feriada' },
       ]

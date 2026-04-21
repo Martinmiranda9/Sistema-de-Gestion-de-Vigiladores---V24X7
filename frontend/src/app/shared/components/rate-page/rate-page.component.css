@@ -1,0 +1,243 @@
+/* ── Host ─────────────────────────────────────────────────────────────────── */
+:host {
+  display: block;
+  animation: fadeIn 0.35s ease forwards;
+}
+
+.overtime-page { max-width: 1300px; margin: 0 auto; }
+
+/* ── Loading ─────────────────────────────────────────────────────────────── */
+.loading-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 4rem 1rem;
+  color: #64748b;
+}
+.loading-state i { font-size: 1.5rem; color: #2563eb; }
+
+/* ── Top row ─────────────────────────────────────────────────────────────── */
+.top-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+/* ── Info cards ──────────────────────────────────────────────────────────── */
+.info-card {
+  background: #ffffff;
+  border: 1px solid #e8ecf1;
+  border-radius: 16px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+.info-card:hover {
+  box-shadow: 0 8px 25px rgba(0,0,0,0.07);
+  transform: translateY(-2px);
+}
+
+.card-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+}
+
+.card-icon-wrap {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+  flex-shrink: 0;
+}
+.icon-blue   { background: rgba(37,99,235,0.1);  color: #2563eb; }
+.icon-green  { background: rgba(5,150,105,0.1);  color: #059669; }
+.icon-purple { background: rgba(124,58,237,0.1); color: #7c3aed; }
+
+.card-label    { font-weight: 600; font-size: 0.9rem; color: #1e293b; }
+.card-sublabel { font-size: 0.78rem; color: #64748b; margin-top: 0.1rem; }
+
+.rate-display {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.03em;
+  font-family: 'Inter', sans-serif;
+}
+
+.upcoming-rate { color: #059669; }
+.upcoming-date { font-size: 0.78rem; font-weight: 500; color: #64748b; margin-top: 0.2rem; }
+
+.no-data {
+  font-size: 0.88rem;
+  color: #94a3b8;
+  font-style: italic;
+  padding: 0.5rem 0;
+}
+
+.card-footer { margin-top: auto; }
+
+.card-footer-split {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: auto;
+}
+
+.btn-cancel-upcoming {
+  font-size: 0.82rem !important;
+  padding: 0.45rem 1rem !important;
+}
+
+.btn-sm { font-size: 0.82rem !important; padding: 0.45rem 1rem !important; }
+
+/* ── Simulator ───────────────────────────────────────────────────────────── */
+.sim-body { display: flex; flex-direction: column; gap: 0.85rem; }
+.sim-field { display: flex; flex-direction: column; gap: 0.35rem; }
+.sim-label { font-size: 0.8rem; font-weight: 600; color: #475569; }
+
+.sim-result {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  background: rgba(124,58,237,0.06);
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+}
+.sim-result-label { font-size: 0.75rem; color: #7c3aed; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+.sim-result-value { font-size: 1.5rem; font-weight: 800; color: #7c3aed; }
+
+/* ── Table container ─────────────────────────────────────────────────────── */
+.table-container {
+  background: #ffffff;
+  border-radius: 14px;
+  border: 1px solid #e8ecf1;
+  overflow: hidden;
+}
+
+.table-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid #e8ecf1;
+}
+
+.table-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #1e293b;
+}
+.table-title i { color: #2563eb; font-size: 1rem; }
+
+/* ── Timeline ────────────────────────────────────────────────────────────── */
+.timeline-wrapper { padding: 1.5rem; }
+
+::ng-deep .p-timeline-event-opposite { flex: 0 0 200px !important; }
+
+.tl-date { text-align: right; }
+.tl-date-main { font-size: 0.82rem; font-weight: 600; color: #1e293b; }
+.tl-date-sub  { font-size: 0.72rem; color: #94a3b8; margin-top: 0.1rem; }
+
+.tl-marker {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  border: 2px solid;
+  background: #ffffff;
+  z-index: 1;
+}
+.marker-current  { border-color: #2563eb; color: #2563eb; background: rgba(37,99,235,0.08); }
+.marker-upcoming { border-color: #059669; color: #059669; background: rgba(5,150,105,0.08); }
+.marker-past     { border-color: #cbd5e1; color: #94a3b8; }
+
+.tl-card {
+  background: #f8fafc;
+  border: 1px solid #e8ecf1;
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+  margin-bottom: 0.5rem;
+  position: relative;
+}
+
+.tl-card-top {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.35rem;
+}
+
+.tl-rate {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.tl-badges { display: flex; gap: 0.35rem; }
+
+.tl-meta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.tl-reason, .tl-author {
+  font-size: 0.78rem;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.tl-delete {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+}
+
+.badge-upcoming { background: rgba(5,150,105,0.1); color: #059669; }
+
+/* ── Empty state ─────────────────────────────────────────────────────────── */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 3rem 1rem;
+  color: #94a3b8;
+}
+.empty-state i    { font-size: 2.5rem; color: #cbd5e1; }
+.empty-state span { font-size: 0.9rem; font-weight: 500; }
+
+/* ── Simulator input width ───────────────────────────────────────────────── */
+::ng-deep .sim-input { width: 100% !important; }
+::ng-deep .sim-input .p-inputnumber-input { width: 100% !important; }
+
+/* ── Responsive ──────────────────────────────────────────────────────────── */
+@media (max-width: 1100px) {
+  .top-row { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
+  .top-row { grid-template-columns: 1fr; }
+  ::ng-deep .p-timeline-event-opposite { display: none !important; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

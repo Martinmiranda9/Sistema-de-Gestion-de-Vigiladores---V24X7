@@ -1,0 +1,8 @@
+<p-toast></p-toast>
+
+<app-rate-page pageTitle="Hora Extra"
+  pageSubtitle="Gestioná el valor vigente, programá aumentos y consultá el historial" rateField="extraHourRate"
+  rateLabel="hora extra" iconClass="pi pi-clock" updateRoute="/horas-extras/actualizar"
+  scheduleRoute="/horas-extras/programar" simLabel="Simulá el monto de horas extras" [configs]="configs"
+  [loading]="loading" (deleteRequest)="onDelete($event)">
+</app-rate-page>

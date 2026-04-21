@@ -1,0 +1,214 @@
+:host {
+  display: block;
+  animation: fadeIn 0.35s ease forwards;
+}
+
+/* ── Holidays section ─────────────────────────────────────────────────────── */
+.holidays-section {
+  max-width: 1300px;
+  margin: 1.5rem auto 0;
+}
+
+.holidays-container {
+  background: #ffffff;
+  border-radius: 14px;
+  border: 1px solid #e8ecf1;
+  overflow: hidden;
+}
+
+.holidays-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid #e8ecf1;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.holidays-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #1e293b;
+}
+.holidays-title i { color: #2563eb; font-size: 1rem; }
+
+.holidays-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* ── Year navigation ──────────────────────────────────────────────────────── */
+.year-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.year-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  color: #475569;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.year-btn:hover {
+  background: #f1f5f9;
+  border-color: #2563eb;
+  color: #2563eb;
+}
+
+.year-label {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #1e293b;
+  min-width: 50px;
+  text-align: center;
+}
+
+/* ── Holiday list ─────────────────────────────────────────────────────────── */
+.holidays-list {
+  padding: 0;
+}
+
+.holiday-row {
+  display: flex;
+  align-items: center;
+  padding: 0.85rem 1.25rem;
+  border-bottom: 1px solid #f1f5f9;
+  transition: background 0.15s ease;
+}
+.holiday-row:last-child { border-bottom: none; }
+.holiday-row:hover { background: #f8fafc; }
+
+.holiday-past {
+  opacity: 0.55;
+}
+
+.holiday-date-col {
+  width: 160px;
+  flex-shrink: 0;
+}
+
+.holiday-day {
+  font-weight: 700;
+  font-size: 0.88rem;
+  color: #1e293b;
+  text-transform: capitalize;
+}
+
+.holiday-desc-col {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.holiday-desc {
+  font-size: 0.88rem;
+  color: #334155;
+}
+
+.holiday-recurring {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.72rem;
+  color: #7c3aed;
+  background: rgba(124, 58, 237, 0.08);
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+.holiday-actions-col {
+  display: flex;
+  gap: 0.35rem;
+  flex-shrink: 0;
+}
+
+/* ── Dialog form ──────────────────────────────────────────────────────────── */
+.dialog-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.form-group label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #334155;
+}
+
+.required { color: #dc2626; }
+.w-full { width: 100%; }
+
+.form-group-check {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.check-label {
+  font-size: 0.85rem;
+  color: #334155;
+  cursor: pointer;
+}
+
+.dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+/* ── Loading & empty ──────────────────────────────────────────────────────── */
+.loading-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 3rem 1rem;
+  color: #64748b;
+}
+.loading-state i { font-size: 1.5rem; color: #2563eb; }
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 3rem 1rem;
+  color: #94a3b8;
+}
+.empty-state i { font-size: 2.5rem; color: #cbd5e1; }
+.empty-state span { font-size: 0.9rem; font-weight: 500; }
+
+/* ── Btn styling ──────────────────────────────────────────────────────────── */
+.btn-sm { font-size: 0.82rem !important; padding: 0.45rem 1rem !important; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+  .holidays-header { flex-direction: column; align-items: flex-start; }
+  .holiday-row { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+  .holiday-date-col { width: auto; }
+}

@@ -1,0 +1,113 @@
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>
+
+<app-rate-page
+  pageTitle="Hora Feriada"
+  pageSubtitle="Gestioná el valor de la hora feriada, programá aumentos y consultá el historial"
+  rateField="holidayHourRate"
+  rateLabel="hora feriada"
+  iconClass="pi pi-star"
+  updateRoute="/hora-feriada/actualizar"
+  scheduleRoute="/hora-feriada/programar"
+  simLabel="Simulá el monto de horas feriadas"
+  [configs]="configs"
+  [loading]="loading"
+  (deleteRequest)="onDeleteConfig($event)">
+</app-rate-page>
+
+<!-- ══ CARD — Calendario de feriados ═════════════════════════════════════════ -->
+<div class="holidays-section">
+  <div class="holidays-container">
+    <div class="holidays-header">
+      <div class="holidays-title">
+        <i class="pi pi-calendar"></i>
+        <span>Calendario de Feriados</span>
+      </div>
+      <div class="holidays-actions">
+        <div class="year-nav">
+          <button class="year-btn" (click)="changeYear(-1)"><i class="pi pi-chevron-left"></i></button>
+          <span class="year-label">{{ currentYear }}</span>
+          <button class="year-btn" (click)="changeYear(1)"><i class="pi pi-chevron-right"></i></button>
+        </div>
+        <button pButton label="Agregar feriado" icon="pi pi-plus" class="btn-primary btn-sm"
+          (click)="openNewHoliday()"></button>
+      </div>
+    </div>
+
+    <!-- Loading -->
+    <div class="loading-state" *ngIf="loadingHolidays">
+      <i class="pi pi-spin pi-spinner"></i>
+      <span>Cargando feriados...</span>
+    </div>
+
+    <!-- List -->
+    <div class="holidays-list" *ngIf="!loadingHolidays && holidays.length > 0">
+      <div class="holiday-row" *ngFor="let h of holidays" [class.holiday-past]="isPast(h.date)">
+        <div class="holiday-date-col">
+          <div class="holiday-day">{{ formatHolidayDate(h.date) }}</div>
+        </div>
+        <div class="holiday-desc-col">
+          <span class="holiday-desc">{{ h.description }}</span>
+          <span class="holiday-recurring" *ngIf="h.isRecurring" pTooltip="Se repite cada año" tooltipPosition="top">
+            <i class="pi pi-replay"></i> Recurrente
+          </span>
+        </div>
+        <div class="holiday-actions-col">
+          <button class="action-btn btn-edit" (click)="openEditHoliday(h)" pTooltip="Editar" tooltipPosition="left">
+            <i class="pi pi-pencil"></i>
+          </button>
+          <button class="action-btn btn-delete" (click)="confirmDeleteHoliday(h)" pTooltip="Eliminar" tooltipPosition="left">
+            <i class="pi pi-trash"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty -->
+    <div class="empty-state" *ngIf="!loadingHolidays && holidays.length === 0">
+      <i class="pi pi-calendar"></i>
+      <span>No hay feriados cargados para {{ currentYear }}</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══ DIALOG — Agregar / Editar feriado ═════════════════════════════════════ -->
+<p-dialog
+  [(visible)]="holidayDialogVisible"
+  [modal]="true"
+  [draggable]="false"
+  [header]="editingHoliday ? 'Editar feriado' : 'Nuevo feriado'"
+  [style]="{width: '440px'}"
+  styleClass="overtime-dialog">
+
+  <div class="dialog-form">
+    <div class="form-group">
+      <label>Fecha <span class="required">*</span></label>
+      <p-datepicker
+        [(ngModel)]="holidayDate"
+        dateFormat="dd/mm/yy"
+        placeholder="Seleccioná la fecha del feriado"
+        styleClass="w-full"
+        [showIcon]="true">
+      </p-datepicker>
+    </div>
+    <div class="form-group">
+      <label>Descripción <span class="required">*</span></label>
+      <input pInputText [(ngModel)]="holidayForm.description"
+        placeholder="Ej: Día de la Independencia" class="w-full" />
+    </div>
+    <div class="form-group-check">
+      <p-checkbox [(ngModel)]="holidayForm.isRecurring" [binary]="true" inputId="recurring"></p-checkbox>
+      <label for="recurring" class="check-label">Se repite todos los años</label>
+    </div>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <div class="dialog-footer">
+      <button pButton label="Cancelar" class="p-button-text btn-cancel" (click)="holidayDialogVisible = false"></button>
+      <button pButton [label]="editingHoliday ? 'Guardar' : 'Agregar'" icon="pi pi-check" class="btn-primary"
+        [loading]="savingHoliday" [disabled]="!holidayDate || !holidayForm.description.trim()"
+        (click)="saveHoliday()"></button>
+    </div>
+  </ng-template>
+</p-dialog>

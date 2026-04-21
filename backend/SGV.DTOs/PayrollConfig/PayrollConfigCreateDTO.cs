@@ -22,4 +22,10 @@ public class PayrollConfigCreateDTO
 
     [Required(ErrorMessage = "La fecha de vigencia es obligatoria.")]
     public DateTime ValidFrom { get; set; }
+
+    [MaxLength(500)]
+    public string? Reason { get; set; }
+
+    [MaxLength(100)]
+    public string? ChangedBy { get; set; }
 }

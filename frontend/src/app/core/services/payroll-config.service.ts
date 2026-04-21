@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
-import { Observable, map } from 'rxjs';
+import { Observable } from 'rxjs';
+import { timeout, retry } from 'rxjs/operators';
 
 export interface PayrollConfig {
   id: number;
@@ -10,23 +11,51 @@ export interface PayrollConfig {
   holidayHourRate: number;
   extraHourRate: number;
   validFrom: string;
+  reason?: string;
+  changedBy?: string;
+  createdAt: string;
 }
 
-@Injectable({
-  providedIn: 'root'
-})
+export interface PayrollConfigCreate {
+  normalHourRate: number;
+  nightSurchargeRate: number;
+  holidayHourRate: number;
+  extraHourRate: number;
+  validFrom: string;
+  reason?: string;
+  changedBy?: string;
+}
+
+@Injectable({ providedIn: 'root' })
 export class PayrollConfigService {
   private apiUrl = `${environment.apiUrl}/PayrollConfigs`;
+  private readonly TIMEOUT_MS = 10_000;
 
   constructor(private http: HttpClient) {}
 
-  getLatestConfig(): Observable<PayrollConfig | null> {
+  getAll(): Observable<PayrollConfig[]> {
     return this.http.get<PayrollConfig[]>(this.apiUrl).pipe(
-      map(configs => {
-        if (!configs || configs.length === 0) return null;
-        // RxJS map encapsulates the business logic of retrieving the latest valid configuration
-        return configs.sort((a, b) => new Date(b.validFrom).getTime() - new Date(a.validFrom).getTime())[0];
-      })
+      timeout(this.TIMEOUT_MS),
+      retry(1)
     );
+  }
+
+  getCurrent(date: Date = new Date()): Observable<PayrollConfig> {
+    const iso = date.toISOString().split('T')[0];
+    return this.http.get<PayrollConfig>(`${this.apiUrl}/current?date=${iso}`).pipe(
+      timeout(this.TIMEOUT_MS)
+    );
+  }
+
+  create(dto: PayrollConfigCreate): Observable<PayrollConfig> {
+    return this.http.post<PayrollConfig>(this.apiUrl, dto);
+  }
+
+  update(id: number, dto: PayrollConfigCreate): Observable<PayrollConfig> {
+    return this.http.put<PayrollConfig>(`${this.apiUrl}/${id}`, dto);
+  }
+
+  delete(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 }

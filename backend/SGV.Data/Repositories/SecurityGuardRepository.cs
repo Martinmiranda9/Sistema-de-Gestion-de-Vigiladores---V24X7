@@ -36,6 +36,9 @@ public class SecurityGuardRepository : ISecurityGuardRepository
     public async Task AddAsync(SecurityGuard securityGuard)
         => await _context.SecurityGuards.AddAsync(securityGuard);
 
+    public void Remove(SecurityGuard securityGuard)
+        => _context.SecurityGuards.Remove(securityGuard);
+
     public async Task SaveChangesAsync()
         => await _context.SaveChangesAsync();
 }

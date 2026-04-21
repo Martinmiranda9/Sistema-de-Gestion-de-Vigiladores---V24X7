@@ -1,0 +1,33 @@
+<p-toast></p-toast>
+
+<!-- Card informativa de horario nocturno -->
+<div class="night-info-banner">
+  <div class="night-info-icon">
+    <i class="pi pi-moon"></i>
+  </div>
+  <div class="night-info-content">
+    <div class="night-info-title">Franja horaria nocturna</div>
+    <div class="night-info-desc">
+      El recargo nocturno se aplica a las horas trabajadas entre las <strong>21:00 hs</strong> y las <strong>06:00 hs</strong> del día siguiente.
+    </div>
+  </div>
+  <div class="night-info-hours">
+    <div class="hour-badge"><i class="pi pi-clock"></i> 21:00</div>
+    <span class="hour-arrow">→</span>
+    <div class="hour-badge"><i class="pi pi-sun"></i> 06:00</div>
+  </div>
+</div>
+
+<app-rate-page
+  pageTitle="Hora Nocturna"
+  pageSubtitle="Gestioná el recargo nocturno, programá aumentos y consultá el historial"
+  rateField="nightSurchargeRate"
+  rateLabel="hora nocturna"
+  iconClass="pi pi-moon"
+  updateRoute="/hora-nocturna/actualizar"
+  scheduleRoute="/hora-nocturna/programar"
+  simLabel="Simulá el monto de horas nocturnas"
+  [configs]="configs"
+  [loading]="loading"
+  (deleteRequest)="onDelete($event)">
+</app-rate-page>

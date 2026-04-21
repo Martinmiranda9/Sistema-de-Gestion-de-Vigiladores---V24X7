@@ -13,7 +13,7 @@ public class SecurityGuardService : ISecurityGuardService
 
     public async Task<IEnumerable<SecurityGuardDTO>> GetAllAsync()
     {
-        var guards = await _repo.GetAllAsync();
+        var guards = await _repo.GetAllAsync(includeInactive: true);
         return guards.Select(MapToDTO);
     }
 
@@ -63,7 +63,7 @@ public class SecurityGuardService : ISecurityGuardService
         var guard = await _repo.GetByIdAsync(id);
         if (guard == null) return false;
 
-        guard.IsActive = false;
+        _repo.Remove(guard);
         await _repo.SaveChangesAsync();
         return true;
     }
