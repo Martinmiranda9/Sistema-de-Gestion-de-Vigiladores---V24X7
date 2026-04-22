@@ -13,21 +13,10 @@ import { TooltipModule } from 'primeng/tooltip';
 
 import { MessageService, ConfirmationService } from 'primeng/api';
 
-import { PayrollConfig } from '../../../core/services/payroll-config.service';
+import { PayrollConfig, TimelineEvent } from '../../../core/models';
 
 /** Tipo de tarifa que maneja este componente */
 export type RateField = 'extraHourRate' | 'nightSurchargeRate' | 'holidayHourRate';
-
-export interface TimelineEvent {
-  validFrom: Date;
-  createdAt: Date;
-  rate: number;
-  reason?: string;
-  changedBy?: string;
-  id: number;
-  isCurrent: boolean;
-  isUpcoming: boolean;
-}
 
 @Component({
   selector: 'app-rate-page',

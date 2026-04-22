@@ -12,7 +12,8 @@ import { TooltipModule } from 'primeng/tooltip';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { MessageService, ConfirmationService } from 'primeng/api';
-import { SecurityGuardService, SecurityGuard, SecurityGuardCreate, SecurityGuardUpdate } from '../../core/services/security-guard.service';
+import { SecurityGuardService } from '../../core/services/security-guard.service';
+import { SecurityGuard } from '../../core/models';
 
 @Component({
   selector: 'app-security-guards',

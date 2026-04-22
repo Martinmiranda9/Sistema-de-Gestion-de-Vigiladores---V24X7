@@ -4,7 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
 import { MessageService } from 'primeng/api';
-import { OvertimeSpreadsheetService, OvertimeSpreadsheetDetail, OvertimeSpreadsheetSummary } from '../../core/services/overtime-spreadsheet.service';
+import { OvertimeSpreadsheetService } from '../../core/services/overtime-spreadsheet.service';
+import { OvertimeSpreadsheetDetail, OvertimeSpreadsheetSummary } from '../../core/models';
 
 @Component({
   selector: 'app-overtime-history',

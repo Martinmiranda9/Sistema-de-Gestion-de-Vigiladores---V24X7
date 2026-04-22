@@ -10,23 +10,11 @@ import { TooltipModule } from 'primeng/tooltip';
 
 import { MessageService } from 'primeng/api';
 
-import { WorkplaceService, Workplace } from '../../core/services/workplace.service';
-import { SecurityGuardService, SecurityGuard } from '../../core/services/security-guard.service';
-import { PayrollConfigService, PayrollConfig } from '../../core/services/payroll-config.service';
-import { OvertimeSpreadsheetService, OvertimeSpreadsheetCreatePayload } from '../../core/services/overtime-spreadsheet.service';
-
-/** Row in the spreadsheet */
-export interface SpreadsheetRow {
-  guardId: number;
-  fullName: string;
-  dni: string;
-  fileNumber: string;
-  hours: number;
-  total: number;
-  verified: boolean;
-  /** Phase 2: flag indicating data came from shift records */
-  autoFilled: boolean;
-}
+import { WorkplaceService } from '../../core/services/workplace.service';
+import { SecurityGuardService } from '../../core/services/security-guard.service';
+import { PayrollConfigService } from '../../core/services/payroll-config.service';
+import { OvertimeSpreadsheetService } from '../../core/services/overtime-spreadsheet.service';
+import { OvertimeSpreadsheetCreatePayload, PayrollConfig, SecurityGuard, SpreadsheetRow, Workplace } from '../../core/models';
 
 @Component({
   selector: 'app-overtime-spreadsheet',

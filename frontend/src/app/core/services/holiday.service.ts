@@ -3,19 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 import { timeout, retry } from 'rxjs/operators';
-
-export interface Holiday {
-  id: number;
-  date: string;
-  description: string;
-  isRecurring: boolean;
-}
-
-export interface HolidayCreate {
-  date: string;
-  description: string;
-  isRecurring: boolean;
-}
+import { Holiday, HolidayCreate } from '../models';
 
 @Injectable({ providedIn: 'root' })
 export class HolidayService {

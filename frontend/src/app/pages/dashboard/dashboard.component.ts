@@ -4,23 +4,7 @@ import { RouterModule } from '@angular/router';
 import { RippleModule } from 'primeng/ripple';
 import { SecurityGuardService } from '../../core/services/security-guard.service';
 import { PayrollConfigService } from '../../core/services/payroll-config.service';
-
-interface KpiCard {
-  title: string;
-  value: string;
-  subtitle: string;
-  icon: string;
-  lastUpdate: Date;
-  color: string;
-}
-
-interface QuickAction {
-  title: string;
-  description: string;
-  icon: string;
-  route: string;
-  color: string;
-}
+import { KpiCard, QuickAction } from '../../core/models';
 
 @Component({
   selector: 'app-dashboard',

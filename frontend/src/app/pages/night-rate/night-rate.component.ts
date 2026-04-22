@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RatePageComponent } from '../../shared/components/rate-page/rate-page.component';
-import { PayrollConfigService, PayrollConfig } from '../../core/services/payroll-config.service';
+import { PayrollConfigService } from '../../core/services/payroll-config.service';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { PayrollConfig } from '../../core/models';
 
 @Component({
   selector: 'app-night-rate',

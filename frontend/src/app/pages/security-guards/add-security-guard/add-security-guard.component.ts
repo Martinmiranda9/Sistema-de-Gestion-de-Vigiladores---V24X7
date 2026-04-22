@@ -8,8 +8,9 @@ import { ToastModule } from 'primeng/toast';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { DividerModule } from 'primeng/divider';
 import { MessageService, MenuItem } from 'primeng/api';
-import { SecurityGuardService, SecurityGuardCreate } from '../../../core/services/security-guard.service';
-import { WorkplaceService, Workplace } from '../../../core/services/workplace.service';
+import { SecurityGuardService } from '../../../core/services/security-guard.service';
+import { WorkplaceService } from '../../../core/services/workplace.service';
+import { SecurityGuardCreate, Workplace } from '../../../core/models';
 
 @Component({
   selector: 'app-add-security-guard',

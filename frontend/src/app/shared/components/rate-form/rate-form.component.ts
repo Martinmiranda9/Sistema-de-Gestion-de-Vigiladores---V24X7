@@ -12,8 +12,9 @@ import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { DividerModule } from 'primeng/divider';
 import { MessageService } from 'primeng/api';
 
-import { PayrollConfigService, PayrollConfigCreate, PayrollConfig } from '../../../core/services/payroll-config.service';
+import { PayrollConfigService } from '../../../core/services/payroll-config.service';
 import { RateField } from '../rate-page/rate-page.component';
+import { PayrollConfig, PayrollConfigCreate } from '../../../core/models';
 
 /**
  * Formulario compartido para actualizar o programar aumentos de cualquier tarifa.

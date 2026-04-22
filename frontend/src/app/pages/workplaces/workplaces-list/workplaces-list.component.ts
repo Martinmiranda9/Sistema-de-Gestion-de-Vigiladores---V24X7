@@ -11,7 +11,8 @@ import { TooltipModule } from 'primeng/tooltip';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { MessageService, ConfirmationService } from 'primeng/api';
-import { WorkplaceService, Workplace } from '../../../core/services/workplace.service';
+import { WorkplaceService } from '../../../core/services/workplace.service';
+import { Workplace } from '../../../core/models';
 
 @Component({
   selector: 'app-workplaces-list',

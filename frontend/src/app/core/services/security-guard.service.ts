@@ -2,35 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { Observable, map } from 'rxjs';
-
-export interface SecurityGuard {
-  id: number;
-  firstName: string;
-  lastName: string;
-  dni: string;
-  fileNumber: string;
-  workplaceId: number | null;
-  workplaceName: string | null;
-  isActive: boolean;
-  fullName: string;
-}
-
-export interface SecurityGuardCreate {
-  firstName: string;
-  lastName: string;
-  dni: string;
-  fileNumber: string;
-  workplaceId: number | null;
-}
-
-export interface SecurityGuardUpdate {
-  firstName: string;
-  lastName: string;
-  dni: string;
-  fileNumber: string;
-  workplaceId: number | null;
-  isActive: boolean;
-}
+import { SecurityGuard, SecurityGuardCreate, SecurityGuardUpdate } from '../models';
 
 @Injectable({
   providedIn: 'root'

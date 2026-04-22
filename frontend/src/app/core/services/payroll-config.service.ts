@@ -3,28 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 import { timeout, retry } from 'rxjs/operators';
-
-export interface PayrollConfig {
-  id: number;
-  normalHourRate: number;
-  nightSurchargeRate: number;
-  holidayHourRate: number;
-  extraHourRate: number;
-  validFrom: string;
-  reason?: string;
-  changedBy?: string;
-  createdAt: string;
-}
-
-export interface PayrollConfigCreate {
-  normalHourRate: number;
-  nightSurchargeRate: number;
-  holidayHourRate: number;
-  extraHourRate: number;
-  validFrom: string;
-  reason?: string;
-  changedBy?: string;
-}
+import { PayrollConfig, PayrollConfigCreate } from '../models';
 
 @Injectable({ providedIn: 'root' })
 export class PayrollConfigService {

@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RatePageComponent } from '../../shared/components/rate-page/rate-page.component';
-import { PayrollConfigService, PayrollConfig } from '../../core/services/payroll-config.service';
-import { HolidayService, Holiday, HolidayCreate } from '../../core/services/holiday.service';
+import { PayrollConfigService } from '../../core/services/payroll-config.service';
+import { HolidayService } from '../../core/services/holiday.service';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
@@ -13,6 +13,7 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { DialogModule } from 'primeng/dialog';
 import { TooltipModule } from 'primeng/tooltip';
 import { CheckboxModule } from 'primeng/checkbox';
+import { Holiday, HolidayCreate, PayrollConfig } from '../../core/models';
 
 @Component({
   selector: 'app-holiday-rate',

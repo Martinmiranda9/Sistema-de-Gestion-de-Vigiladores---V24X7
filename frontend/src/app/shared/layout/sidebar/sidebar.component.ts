@@ -3,18 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { RippleModule } from 'primeng/ripple';
 import { TooltipModule } from 'primeng/tooltip';
-
-interface MenuItem {
-  label: string;
-  icon: string;
-  route: string;
-  badge?: number;
-}
-
-interface MenuSection {
-  title: string;
-  items: MenuItem[];
-}
+import { MenuSection } from '../../../core/models';
 
 @Component({
   selector: 'app-sidebar',

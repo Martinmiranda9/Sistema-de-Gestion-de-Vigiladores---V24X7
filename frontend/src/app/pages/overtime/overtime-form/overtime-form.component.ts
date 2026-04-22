@@ -12,7 +12,8 @@ import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { DividerModule } from 'primeng/divider';
 import { MessageService } from 'primeng/api';
 
-import { PayrollConfigService, PayrollConfigCreate, PayrollConfig } from '../../../core/services/payroll-config.service';
+import { PayrollConfigService } from '../../../core/services/payroll-config.service';
+import { PayrollConfig, PayrollConfigCreate } from '../../../core/models';
 
 @Component({
   selector: 'app-overtime-form',

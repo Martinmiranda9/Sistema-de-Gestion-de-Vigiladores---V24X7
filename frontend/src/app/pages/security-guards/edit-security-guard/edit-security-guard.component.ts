@@ -8,9 +8,10 @@ import { ToastModule } from 'primeng/toast';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { DividerModule } from 'primeng/divider';
 import { MessageService, MenuItem } from 'primeng/api';
-import { SecurityGuardService, SecurityGuard, SecurityGuardUpdate } from '../../../core/services/security-guard.service';
-import { WorkplaceService, Workplace } from '../../../core/services/workplace.service';
+import { SecurityGuardService } from '../../../core/services/security-guard.service';
+import { WorkplaceService } from '../../../core/services/workplace.service';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { SecurityGuardUpdate, Workplace } from '../../../core/models';
 
 @Component({
   selector: 'app-edit-security-guard',

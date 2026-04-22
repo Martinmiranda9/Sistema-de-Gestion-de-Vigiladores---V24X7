@@ -8,7 +8,8 @@ import { ToastModule } from 'primeng/toast';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { MessageService, MenuItem } from 'primeng/api';
-import { WorkplaceService, Workplace, WorkplaceCreate, WorkplaceUpdate } from '../../../core/services/workplace.service';
+import { WorkplaceService } from '../../../core/services/workplace.service';
+import { Workplace, WorkplaceCreate, WorkplaceUpdate } from '../../../core/models';
 
 @Component({
   selector: 'app-workplace-form',
