@@ -95,6 +95,9 @@
           class="btn-primary btn-sm" [loading]="saving" (click)="saveSpreadsheet()"></button>
       </div>
     </div>
+    <div class="print-rate-reference">
+      <strong>Valor hora extra de referencia:</strong> {{ formatCurrency(extraHourRate) }} /hora
+    </div>
 
     <!-- Loading guards -->
     <div class="loading-state" *ngIf="loadingGuards">

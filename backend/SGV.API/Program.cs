@@ -72,6 +72,7 @@ builder.Services.AddScoped<IWorkplaceRepository, WorkplaceRepository>();
 builder.Services.AddScoped<IHolidayRepository, HolidayRepository>();
 builder.Services.AddScoped<IShiftRecordRepository, ShiftRecordRepository>();
 builder.Services.AddScoped<IPayrollConfigRepository, PayrollConfigRepository>();
+builder.Services.AddScoped<IOvertimeSpreadsheetRepository, OvertimeSpreadsheetRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 // Services (Application)
@@ -80,6 +81,7 @@ builder.Services.AddScoped<IWorkplaceService, WorkplaceService>();
 builder.Services.AddScoped<IHolidayService, HolidayService>();
 builder.Services.AddScoped<IShiftRecordService, ShiftRecordService>();
 builder.Services.AddScoped<IPayrollConfigService, PayrollConfigService>();
+builder.Services.AddScoped<IOvertimeSpreadsheetService, OvertimeSpreadsheetService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 
 // JWT Authentication

@@ -13,6 +13,7 @@ import { MessageService } from 'primeng/api';
 import { WorkplaceService, Workplace } from '../../core/services/workplace.service';
 import { SecurityGuardService, SecurityGuard } from '../../core/services/security-guard.service';
 import { PayrollConfigService, PayrollConfig } from '../../core/services/payroll-config.service';
+import { OvertimeSpreadsheetService, OvertimeSpreadsheetCreatePayload } from '../../core/services/overtime-spreadsheet.service';
 
 /** Row in the spreadsheet */
 export interface SpreadsheetRow {
@@ -71,6 +72,7 @@ export class OvertimeSpreadsheetComponent implements OnInit {
     private workplaceSvc: WorkplaceService,
     private guardSvc: SecurityGuardService,
     private payrollSvc: PayrollConfigService,
+    private overtimeSpreadsheetSvc: OvertimeSpreadsheetService,
     private msgSvc: MessageService
   ) {
     const now = new Date();
@@ -212,18 +214,58 @@ export class OvertimeSpreadsheetComponent implements OnInit {
     this.rows.splice(index, 1);
   }
 
-  // ── Save (placeholder — Phase 2) ──────────────────────────────────────────
   saveSpreadsheet(): void {
+    if (!this.selectedWorkplaceId) {
+      this.msgSvc.add({ severity: 'warn', summary: 'Atención', detail: 'Seleccioná un objetivo antes de guardar.' });
+      return;
+    }
+
     if (this.rows.length === 0) {
       this.msgSvc.add({ severity: 'warn', summary: 'Atención', detail: 'No hay datos para guardar.' });
       return;
     }
+
+    const rowsToSave = this.rows
+      .filter(r => (r.hours || 0) > 0 || (r.total || 0) > 0)
+      .map(r => ({
+        securityGuardId: r.guardId > 0 ? r.guardId : null,
+        fullName: r.fullName,
+        dni: r.dni,
+        fileNumber: r.fileNumber,
+        hours: r.hours || 0,
+        total: r.total || 0,
+        verified: r.verified
+      }));
+
+    if (rowsToSave.length === 0) {
+      this.msgSvc.add({ severity: 'warn', summary: 'Atención', detail: 'Ingresá al menos una fila con horas para guardar.' });
+      return;
+    }
+
+    const payload: OvertimeSpreadsheetCreatePayload = {
+      workplaceId: this.selectedWorkplaceId,
+      month: this.selectedMonth + 1,
+      year: this.selectedYear,
+      extraHourRate: this.extraHourRate,
+      rateValidFrom: this.rateValidFrom || null,
+      rows: rowsToSave
+    };
+
     this.saving = true;
-    // TODO Phase 2: POST to backend endpoint
-    setTimeout(() => {
-      this.saving = false;
-      this.msgSvc.add({ severity: 'success', summary: 'Guardado', detail: 'Planilla guardada correctamente.' });
-    }, 800);
+    this.overtimeSpreadsheetSvc.create(payload).subscribe({
+      next: (saved) => {
+        this.saving = false;
+        this.msgSvc.add({
+          severity: 'success',
+          summary: 'Guardado',
+          detail: `Planilla guardada correctamente (#${saved.id}).`
+        });
+      },
+      error: () => {
+        this.saving = false;
+        this.msgSvc.add({ severity: 'error', summary: 'Error', detail: 'No se pudo guardar la planilla.' });
+      }
+    });
   }
 
   // ── Print ─────────────────────────────────────────────────────────────────

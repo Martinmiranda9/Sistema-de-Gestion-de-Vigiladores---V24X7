@@ -12,6 +12,7 @@ import { NightRateComponent } from './pages/night-rate/night-rate.component';
 import { HolidayRateComponent } from './pages/holiday-rate/holiday-rate.component';
 import { RateFormComponent } from './shared/components/rate-form/rate-form.component';
 import { OvertimeSpreadsheetComponent } from './pages/overtime-spreadsheet/overtime-spreadsheet.component';
+import { OvertimeHistoryComponent } from './pages/overtime-history/overtime-history.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -28,6 +29,7 @@ export const routes: Routes = [
       { path: 'objetivos/editar/:id', component: WorkplaceFormComponent },
       // Planilla
       { path: 'planilla/horas-extras', component: OvertimeSpreadsheetComponent },
+      { path: 'historico', component: OvertimeHistoryComponent },
       // Liquidación — Hora Extra
       { path: 'horas-extras', component: OvertimeComponent },
       { path: 'horas-extras/actualizar', component: RateFormComponent },

@@ -12,6 +12,8 @@ public class SGVDbContext : DbContext
     public DbSet<Holiday> Holidays => Set<Holiday>();
     public DbSet<ShiftRecord> ShiftRecords => Set<ShiftRecord>();
     public DbSet<PayrollConfig> PayrollConfigs => Set<PayrollConfig>();
+    public DbSet<OvertimeSpreadsheet> OvertimeSpreadsheets => Set<OvertimeSpreadsheet>();
+    public DbSet<OvertimeSpreadsheetRow> OvertimeSpreadsheetRows => Set<OvertimeSpreadsheetRow>();
     public DbSet<User> Users => Set<User>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -40,6 +42,29 @@ public class SGVDbContext : DbContext
             entity.HasOne(r => r.Workplace)
                   .WithMany()
                   .HasForeignKey(r => r.WorkplaceId)
+                  .OnDelete(DeleteBehavior.SetNull);
+        });
+
+        modelBuilder.Entity<OvertimeSpreadsheet>(entity =>
+        {
+            entity.HasOne(s => s.Workplace)
+                  .WithMany()
+                  .HasForeignKey(s => s.WorkplaceId)
+                  .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasMany(s => s.Rows)
+                  .WithOne(r => r.OvertimeSpreadsheet)
+                  .HasForeignKey(r => r.OvertimeSpreadsheetId)
+                  .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasIndex(s => new { s.Year, s.Month, s.WorkplaceId });
+        });
+
+        modelBuilder.Entity<OvertimeSpreadsheetRow>(entity =>
+        {
+            entity.HasOne(r => r.SecurityGuard)
+                  .WithMany()
+                  .HasForeignKey(r => r.SecurityGuardId)
                   .OnDelete(DeleteBehavior.SetNull);
         });
 
