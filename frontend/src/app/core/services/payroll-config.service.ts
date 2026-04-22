@@ -41,10 +41,17 @@ export class PayrollConfigService {
   }
 
   getCurrent(date: Date = new Date()): Observable<PayrollConfig> {
-    const iso = date.toISOString().split('T')[0];
-    return this.http.get<PayrollConfig>(`${this.apiUrl}/current?date=${iso}`).pipe(
+    const localDate = this.toLocalIsoDate(date);
+    return this.http.get<PayrollConfig>(`${this.apiUrl}/current?date=${localDate}`).pipe(
       timeout(this.TIMEOUT_MS)
     );
+  }
+
+  private toLocalIsoDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
 
   create(dto: PayrollConfigCreate): Observable<PayrollConfig> {

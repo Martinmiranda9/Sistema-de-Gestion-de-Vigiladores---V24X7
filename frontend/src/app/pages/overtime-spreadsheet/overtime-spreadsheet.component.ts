@@ -105,12 +105,9 @@ export class OvertimeSpreadsheetComponent implements OnInit {
 
   loadRate(): void {
     this.loadingRate = true;
-    // Buscamos el valor vigente al ÚLTIMO día del mes seleccionado
-    // new Date(year, month + 1, 0) da el último día del mes actual.
-    // Usamos 23:59:59 para asegurarnos de que cubra cualquier creación de ese día.
-    const targetDate = new Date(this.selectedYear, this.selectedMonth + 1, 0, 23, 59, 59);
-    
-    this.payrollSvc.getCurrent(targetDate).subscribe({
+
+    // La card muestra siempre el valor vigente actual, igual que dashboard.
+    this.payrollSvc.getCurrent().subscribe({
       next: (cfg: PayrollConfig) => {
         this.extraHourRate = cfg.extraHourRate;
         this.rateValidFrom = cfg.validFrom;
