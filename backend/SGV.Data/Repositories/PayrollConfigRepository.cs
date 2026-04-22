@@ -23,6 +23,7 @@ public class PayrollConfigRepository : IPayrollConfigRepository
         => await _context.PayrollConfigs
             .Where(c => c.ValidFrom <= date.Date)
             .OrderByDescending(c => c.ValidFrom)
+            .ThenByDescending(c => c.CreatedAt)
             .FirstOrDefaultAsync();
 
     public async Task AddAsync(PayrollConfig config)

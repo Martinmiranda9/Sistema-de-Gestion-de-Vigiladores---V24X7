@@ -1,0 +1,190 @@
+<p-toast></p-toast>
+
+<div class="ot-page">
+
+  <!-- ══ HEADER ═══════════════════════════════════════════════════════════════ -->
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Planilla de Horas Extras</h1>
+      <p class="page-subtitle">Generá la planilla de liquidación por objetivo y mes</p>
+    </div>
+  </div>
+
+  <!-- ══ TOP ROW — Selectors + Rate badge ════════════════════════════════════ -->
+  <div class="top-row">
+
+    <!-- CARD: Selector de objetivo -->
+    <div class="info-card selector-card">
+      <div class="card-header">
+        <div class="card-icon-wrap icon-blue"><i class="pi pi-flag"></i></div>
+        <div>
+          <div class="card-label">Objetivo</div>
+          <div class="card-sublabel">Seleccioná el lugar de trabajo</div>
+        </div>
+      </div>
+      <div class="selector-body">
+        <select [(ngModel)]="selectedWorkplaceId" class="native-select objective-select"
+          (change)="onWorkplaceChange()">
+          <option [ngValue]="null" disabled>Elegí un objetivo...</option>
+          <option *ngFor="let wp of workplaces" [ngValue]="wp.id">
+            {{ wp.name }} — {{ wp.address }}
+          </option>
+        </select>
+      </div>
+    </div>
+
+    <!-- CARD: Período -->
+    <div class="info-card period-card">
+      <div class="card-header">
+        <div class="card-icon-wrap icon-purple"><i class="pi pi-calendar"></i></div>
+        <div>
+          <div class="card-label">Período</div>
+          <div class="card-sublabel">Mes de la planilla</div>
+        </div>
+      </div>
+      <div class="period-body">
+        <div class="period-selectors">
+          <select [(ngModel)]="selectedMonth" class="native-select" (change)="onPeriodChange()">
+            <option *ngFor="let m of months; let i = index" [ngValue]="i">{{ m }}</option>
+          </select>
+          <input type="number" [(ngModel)]="selectedYear" class="native-input year-input" 
+            min="2020" max="2030" placeholder="Año" (change)="onPeriodChange()" />
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD: Valor hora extra -->
+    <div class="info-card rate-card">
+      <div class="card-header">
+        <div class="card-icon-wrap icon-green"><i class="pi pi-dollar"></i></div>
+        <div>
+          <div class="card-label">Valor Hora Extra</div>
+          <div class="card-sublabel" *ngIf="!loadingRate">Valor vigente de referencia</div>
+          <div class="card-sublabel" *ngIf="loadingRate">Cargando...</div>
+        </div>
+      </div>
+      <div class="rate-badge-container" *ngIf="!loadingRate">
+        <div class="rate-badge">
+          <span class="rate-value">{{ formatCurrency(extraHourRate) }}</span>
+          <span class="rate-per">/hora</span>
+        </div>
+      </div>
+      <div class="loading-mini" *ngIf="loadingRate">
+        <i class="pi pi-spin pi-spinner"></i>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══ TABLE SECTION ═══════════════════════════════════════════════════════ -->
+  <div class="table-container" *ngIf="selectedWorkplace">
+    <div class="table-header">
+      <div class="table-title">
+        <i class="pi pi-list"></i>
+        <div>
+          <span class="table-title-main">Planilla de Horas Extras — {{ selectedWorkplace.name }}</span>
+          <span class="table-title-sub">{{ monthLabel }}</span>
+        </div>
+      </div>
+      <div class="table-actions no-print">
+        <button pButton label="Agregar vigilador" icon="pi pi-user-plus"
+          class="p-button-outlined p-button-sm" (click)="addGuardManually()"></button>
+        <button pButton label="Imprimir" icon="pi pi-print"
+          class="p-button-outlined p-button-sm" (click)="printSpreadsheet()"></button>
+        <button pButton label="Guardar planilla" icon="pi pi-save"
+          class="btn-primary btn-sm" [loading]="saving" (click)="saveSpreadsheet()"></button>
+      </div>
+    </div>
+
+    <!-- Loading guards -->
+    <div class="loading-state" *ngIf="loadingGuards">
+      <i class="pi pi-spin pi-spinner"></i>
+      <span>Cargando vigiladores...</span>
+    </div>
+
+    <!-- Table (native HTML — compatible with Angular 20) -->
+    <div class="table-wrapper" *ngIf="!loadingGuards && rows.length > 0">
+      <table class="data-table spreadsheet-table">
+        <thead>
+          <tr>
+            <th style="width: 50px" class="th-center">
+              <i class="pi pi-check-square" pTooltip="Validado" tooltipPosition="top"></i>
+            </th>
+            <th>Vigilador</th>
+            <th style="width: 20%; min-width: 120px;">DNI / Legajo</th>
+            <th style="width: 15%; min-width: 100px;">Cant. Horas</th>
+            <th style="width: 15%; min-width: 120px;">Total ($)</th>
+            <th style="width: 60px" class="th-actions no-print">Acc.</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of rows; let i = index" [class.row-verified]="row.verified">
+            <td class="td-center">
+              <p-checkbox [(ngModel)]="row.verified" [binary]="true"></p-checkbox>
+            </td>
+            <td>
+              <div class="guard-cell">
+                <span class="guard-name-text">{{ row.fullName }}</span>
+              </div>
+            </td>
+            <td>
+              <div class="dni-cell">
+                <span class="dni-text">{{ row.dni }}</span>
+                <span class="file-text">{{ row.fileNumber }}</span>
+              </div>
+            </td>
+            <td>
+              <input type="number" [(ngModel)]="row.hours" min="0" max="999"
+                class="native-input hours-input" placeholder="0"
+                (input)="onHoursChange(row)" (blur)="onHoursChange(row)" />
+            </td>
+            <td>
+              <span class="total-cell" [class.has-value]="row.total > 0">
+                {{ formatCurrency(row.total) }}
+              </span>
+            </td>
+            <td class="no-print">
+              <button class="action-btn btn-delete" (click)="removeRow(i)"
+                pTooltip="Quitar" tooltipPosition="left">
+                <i class="pi pi-trash"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr class="footer-row">
+            <td></td>
+            <td class="footer-label" style="text-align: right;">
+              <span style="display:inline-flex; align-items:center; gap:0.5rem; justify-content:flex-end; width:100%;">
+                <i class="pi pi-chart-bar"></i>
+                Totales ({{ verifiedCount }}/{{ rows.length }} verificados)
+              </span>
+            </td>
+            <td></td>
+            <td class="footer-value" style="text-align: center;">{{ totalHours }} hs</td>
+            <td class="footer-value footer-grand-total">{{ formatCurrency(grandTotal) }}</td>
+            <td class="no-print"></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+    <!-- Empty -->
+    <div class="empty-state" *ngIf="!loadingGuards && rows.length === 0">
+      <i class="pi pi-users"></i>
+      <span>No hay vigiladores asignados a este objetivo</span>
+      <button pButton label="Agregar manualmente" icon="pi pi-user-plus"
+        class="p-button-outlined p-button-sm" style="margin-top: 0.5rem" (click)="addGuardManually()"></button>
+    </div>
+  </div>
+
+  <!-- ══ EMPTY — No workplace selected ═══════════════════════════════════════ -->
+  <div class="empty-placeholder" *ngIf="!selectedWorkplace">
+    <div class="empty-placeholder-icon">
+      <i class="pi pi-flag"></i>
+    </div>
+    <h3>Seleccioná un objetivo</h3>
+    <p>Elegí un lugar de trabajo para generar la planilla de horas extras</p>
+  </div>
+
+</div>

@@ -60,6 +60,10 @@ export class SecurityGuardService {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
+  getByWorkplace(workplaceId: number): Observable<SecurityGuard[]> {
+    return this.http.get<SecurityGuard[]>(`${this.apiUrl}/by-workplace/${workplaceId}`);
+  }
+
   getActiveGuardsCount(): Observable<number> {
     return this.getAll().pipe(
       map(guards => guards.length)
