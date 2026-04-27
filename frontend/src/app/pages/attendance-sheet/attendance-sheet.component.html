@@ -1,0 +1,184 @@
+<p-toast></p-toast>
+
+<div class="att-page">
+
+  <!-- ══ HEADER ═══════════════════════════════════════════════════════════════ -->
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Planilla de Asistencia</h1>
+      <p class="page-subtitle">Control de horarios de vigiladores — registro diario</p>
+    </div>
+  </div>
+
+  <!-- ══ TOP ROW — Header fields ══════════════════════════════════════════════ -->
+  <div class="top-row">
+
+    <!-- CARD: Vigilador -->
+    <div class="info-card">
+      <div class="card-header">
+        <div class="card-icon-wrap icon-blue"><i class="pi pi-user"></i></div>
+        <div>
+          <div class="card-label">Vigilador</div>
+          <div class="card-sublabel">Apellido y nombre</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <input type="text" [(ngModel)]="guardName" class="native-input"
+          placeholder="Ej: Miranda, Martín" />
+      </div>
+    </div>
+
+    <!-- CARD: Objetivo -->
+    <div class="info-card">
+      <div class="card-header">
+        <div class="card-icon-wrap icon-green"><i class="pi pi-flag"></i></div>
+        <div>
+          <div class="card-label">Objetivo</div>
+          <div class="card-sublabel">Lugar de trabajo</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <input type="text" [(ngModel)]="workplace" class="native-input"
+          placeholder="Ej: Banco Central" />
+      </div>
+    </div>
+
+    <!-- CARD: Período -->
+    <div class="info-card">
+      <div class="card-header">
+        <div class="card-icon-wrap icon-purple"><i class="pi pi-calendar"></i></div>
+        <div>
+          <div class="card-label">Período</div>
+          <div class="card-sublabel">Mes y año de la planilla</div>
+        </div>
+      </div>
+      <div class="card-body period-body">
+        <select [(ngModel)]="selectedMonth" class="native-select" (change)="onPeriodChange()">
+          <option *ngFor="let m of months; let i = index" [ngValue]="i">{{ m }}</option>
+        </select>
+        <input type="number" [(ngModel)]="selectedYear" class="native-input year-input"
+          min="2020" max="2030" (change)="onPeriodChange()" />
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══ TABLE SECTION ═══════════════════════════════════════════════════════ -->
+  <div class="table-container">
+    <div class="table-header">
+      <div class="table-title">
+        <i class="pi pi-calendar-clock"></i>
+        <div>
+          <span class="table-title-main">Registro Diario</span>
+          <span class="table-title-sub">{{ monthLabel }}</span>
+        </div>
+      </div>
+      <div class="table-actions no-print">
+        <button pButton label="Limpiar" icon="pi pi-eraser"
+          class="p-button-outlined p-button-sm" (click)="clearSheet()"></button>
+        <button pButton label="Imprimir" icon="pi pi-print"
+          class="p-button-outlined p-button-sm" (click)="printSheet()"></button>
+        <button pButton label="Guardar planilla" icon="pi pi-save"
+          class="btn-primary btn-sm" [loading]="saving" (click)="saveSheet()"></button>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="table-wrapper">
+      <table class="data-table attendance-table">
+        <thead>
+          <tr>
+            <th class="th-day">Día</th>
+            <th class="th-time">Entrada</th>
+            <th class="th-time">Salida</th>
+            <th class="th-center th-dayoff">Franco</th>
+            <th class="th-center th-hours">Hs. Trab.</th>
+            <th class="th-center th-hours">Hs. Noct.</th>
+            <th class="th-notes">Observaciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of rows" [class.row-dayoff]="row.isDayOff">
+            <td class="td-day">
+              <span class="day-number">{{ row.day }}</span>
+            </td>
+            <td>
+              <input type="time" [(ngModel)]="row.entry" class="native-input time-input"
+                [disabled]="row.isDayOff" (change)="onTimeChange(row)" />
+            </td>
+            <td>
+              <input type="time" [(ngModel)]="row.exit" class="native-input time-input"
+                [disabled]="row.isDayOff" (change)="onTimeChange(row)" />
+            </td>
+            <td class="td-center">
+              <input type="checkbox" [(ngModel)]="row.isDayOff"
+                class="dayoff-checkbox" (change)="toggleDayOff(row)" />
+            </td>
+            <td class="td-center">
+              <span class="hours-value" [class.has-value]="row.workedHours > 0">
+                {{ formatHours(row.workedHours) }}
+              </span>
+            </td>
+            <td class="td-center">
+              <span class="hours-value night" [class.has-value]="row.nightHours > 0">
+                {{ formatHours(row.nightHours) }}
+              </span>
+            </td>
+            <td>
+              <input type="text" [(ngModel)]="row.notes" class="native-input notes-input"
+                placeholder="..." [disabled]="row.isDayOff" />
+            </td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr class="footer-row">
+            <td></td>
+            <td colspan="2" class="footer-label" style="text-align: right;">
+              <span style="display:inline-flex; align-items:center; gap:0.5rem; justify-content:flex-end; width:100%;">
+                <i class="pi pi-chart-bar"></i>
+                Totales
+              </span>
+            </td>
+            <td></td>
+            <td class="footer-value td-center">{{ formatHours(totalWorkedHours) }}</td>
+            <td class="footer-value td-center night">{{ formatHours(totalNightHours) }}</td>
+            <td></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+    <!-- Totals summary cards -->
+    <div class="totals-strip">
+      <div class="total-chip">
+        <i class="pi pi-clock"></i>
+        <div>
+          <span class="chip-label">Hs. Trabajadas</span>
+          <span class="chip-value">{{ formatHours(totalWorkedHours) }}</span>
+        </div>
+      </div>
+      <div class="total-chip night-chip">
+        <i class="pi pi-moon"></i>
+        <div>
+          <span class="chip-label">Hs. Nocturnas</span>
+          <span class="chip-value">{{ formatHours(totalNightHours) }}</span>
+        </div>
+      </div>
+      <div class="total-chip extra-chip">
+        <i class="pi pi-plus-circle"></i>
+        <div>
+          <span class="chip-label">Hs. Extras (&gt;160)</span>
+          <span class="chip-value">{{ formatHours(totalExtraHours) }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Info note -->
+    <div class="info-note">
+      <i class="pi pi-info-circle"></i>
+      <span><strong>Horas Nocturnas:</strong> Se calculan las horas trabajadas entre las 21:00 y las 06:00 hs.</span>
+    </div>
+
+  </div>
+
+</div>
