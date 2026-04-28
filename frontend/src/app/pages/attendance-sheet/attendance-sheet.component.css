@@ -2,26 +2,20 @@
   display: block;
   animation: fadeIn 0.35s ease forwards;
 }
-
 .att-page { max-width: 1300px; margin: 0 auto; }
-
-/* ── Top row ──────────────────────────────────────────────────────────────── */
 .top-row {
   display: grid;
   grid-template-columns: 1fr 1fr 0.8fr;
   gap: 1rem;
   margin-bottom: 1.5rem;
 }
-
 .info-card {
   background: #ffffff;
   border-radius: 8px;
   border: 1px solid #e1e7ef;
   padding: 0.85rem 1rem;
 }
-
 .card-header { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.5rem; }
-
 .card-icon-wrap {
   width: 28px; height: 28px; border-radius: 6px;
   display: flex; align-items: center; justify-content: center;
@@ -30,15 +24,10 @@
 .icon-blue   { color: #2563eb; background: #eef2ff; }
 .icon-green  { color: #059669; background: #ecfdf5; }
 .icon-purple { color: #7c3aed; background: #f5f3ff; }
-
 .card-label { font-weight: 500; font-size: 0.85rem; color: #334155; }
 .card-sublabel { font-size: 0.7rem; color: #94a3b8; }
-
 .card-body { margin-top: 0.25rem; }
-
 .period-body { display: flex; gap: 0.5rem; }
-
-/* ── Native inputs ────────────────────────────────────────────────────────── */
 .native-input {
   width: 100%; padding: 0.55rem 0.75rem;
   border: 1px solid #d1d5db; border-radius: 10px;
@@ -48,7 +37,6 @@
 }
 .native-input:focus { border-color: #2563eb; box-shadow: 0 0 0 2px rgba(37,99,235,.15); }
 .native-input:disabled { background: #f1f5f9; color: #94a3b8; cursor: not-allowed; }
-
 .native-select {
   flex: 1; padding: 0.55rem 0.75rem;
   border: 1px solid #d1d5db; border-radius: 10px;
@@ -57,75 +45,56 @@
   outline: none; transition: border-color 0.2s;
 }
 .native-select:focus { border-color: #2563eb; box-shadow: 0 0 0 2px rgba(37,99,235,.15); }
-
 .year-input { width: 80px; text-align: center; }
-
-/* ── Table container ──────────────────────────────────────────────────────── */
 .table-container {
   background: #ffffff; border-radius: 14px;
   border: 1px solid #e8ecf1; overflow: hidden;
 }
-
 .table-header {
   display: flex; align-items: center; justify-content: space-between;
   padding: 1rem 1.25rem; border-bottom: 1px solid #e8ecf1;
   flex-wrap: wrap; gap: 0.75rem;
 }
-
 .table-title { display: flex; align-items: center; gap: 0.65rem; }
 .table-title i { color: #2563eb; font-size: 1rem; }
 .table-title-main { font-weight: 700; font-size: 0.95rem; color: #1e293b; }
 .table-title-sub { font-size: 0.78rem; color: #94a3b8; margin-left: 0.5rem; }
 .table-actions { display: flex; align-items: center; gap: 0.5rem; }
-
-/* ── Attendance table ─────────────────────────────────────────────────────── */
 .table-wrapper { overflow-x: auto; }
 .attendance-table { width: 100%; border-collapse: collapse; }
-
 .attendance-table thead tr {
   background: #f8fafc; border-bottom: 1px solid #e8ecf1;
 }
-
 .attendance-table th {
   padding: 0.5rem 0.75rem; font-size: 0.75rem; font-weight: 500;
   color: #64748b; text-transform: uppercase; letter-spacing: 0.02em;
   text-align: left; white-space: nowrap;
 }
-
 .th-day    { width: 50px; }
 .th-time   { width: 110px; }
 .th-center { text-align: center; }
 .th-dayoff { width: 65px; }
 .th-hours  { width: 85px; }
 .th-notes  { min-width: 140px; }
-
 .attendance-table tbody tr {
   border-bottom: 1px solid #f1f5f9;
   transition: background 0.15s ease;
 }
 .attendance-table tbody tr:hover { background: #f8fafc; }
-
 .attendance-table td {
   padding: 0.35rem 0.75rem; font-size: 0.85rem;
   color: #334155; vertical-align: middle;
 }
-
 .td-center { text-align: center; }
-
 .td-day { width: 50px; }
 .day-number { font-weight: 700; font-size: 0.88rem; color: #1e293b; }
-
-/* ── Day-off row ──────────────────────────────────────────────────────────── */
 .row-dayoff { background: rgba(245, 158, 11, 0.04); }
 .row-dayoff .day-number { color: #d97706; }
 .row-dayoff:hover { background: rgba(245, 158, 11, 0.07) !important; }
-
 .dayoff-checkbox {
   width: 16px; height: 16px;
   cursor: pointer; accent-color: #f59e0b;
 }
-
-/* ── Time inputs ──────────────────────────────────────────────────────────── */
 .time-input {
   width: 95px; padding: 0.35rem 0.5rem;
   border: 1px solid #e2e8f0; border-radius: 6px;
@@ -136,23 +105,17 @@
   border-color: #2563eb;
   box-shadow: 0 0 0 2px rgba(37,99,235,0.1);
 }
-
-/* ── Hours display ────────────────────────────────────────────────────────── */
 .hours-value {
   font-weight: 600; font-size: 0.85rem; color: #94a3b8;
   font-variant-numeric: tabular-nums;
 }
 .hours-value.has-value { color: #059669; }
 .hours-value.night.has-value { color: #7c3aed; }
-
-/* ── Notes input ──────────────────────────────────────────────────────────── */
 .notes-input {
   padding: 0.35rem 0.5rem;
   border: 1px solid #e2e8f0; border-radius: 6px;
   font-size: 0.83rem;
 }
-
-/* ── Footer ───────────────────────────────────────────────────────────────── */
 .footer-row { background: #f8fafc; border-top: 2px solid #e8ecf1; }
 .footer-label {
   font-weight: 600; font-size: 0.85rem; color: #475569;
@@ -164,28 +127,22 @@
   padding: 0.65rem 0.75rem;
 }
 .footer-value.night { color: #7c3aed; }
-
-/* ── Totals strip ─────────────────────────────────────────────────────────── */
 .totals-strip {
   display: grid; grid-template-columns: repeat(3, 1fr);
   gap: 1rem; padding: 1.25rem;
   border-top: 1px solid #f1f5f9;
 }
-
 .total-chip {
   display: flex; align-items: center; gap: 0.75rem;
   padding: 0.85rem 1rem;
   background: #f0f7ff; border-radius: 10px;
   border: 1px solid #dbeafe;
 }
-.total-chip i {
-  font-size: 1.15rem; color: #2563eb; flex-shrink: 0;
-}
+.total-chip i { font-size: 1.15rem; color: #2563eb; flex-shrink: 0; }
 .night-chip { background: #f5f3ff; border-color: #e9d5ff; }
 .night-chip i { color: #7c3aed; }
 .extra-chip { background: #ecfdf5; border-color: #bbf7d0; }
 .extra-chip i { color: #059669; }
-
 .chip-label {
   display: block; font-size: 0.7rem; font-weight: 600;
   color: #64748b; text-transform: uppercase; letter-spacing: 0.02em;
@@ -194,8 +151,6 @@
   display: block; font-size: 1.2rem; font-weight: 800;
   color: #1e293b; line-height: 1.2;
 }
-
-/* ── Info note ─────────────────────────────────────────────────────────────── */
 .info-note {
   display: flex; align-items: center; gap: 0.6rem;
   padding: 0.75rem 1.25rem; margin: 0;
@@ -204,15 +159,9 @@
 }
 .info-note i { color: #94a3b8; font-size: 0.85rem; flex-shrink: 0; }
 .info-note strong { color: #475569; }
-
-/* ── Buttons ──────────────────────────────────────────────────────────────── */
 .btn-primary { background: #2563eb; border: none; }
 .btn-primary:hover { background: #1d4ed8; }
 .btn-sm { font-size: 0.82rem !important; padding: 0.45rem 0.85rem !important; }
-
-/* =========================================
-   PRINT
-   ========================================= */
 @media print {
   .no-print { display: none !important; }
   body { background: #fff !important; font-size: 11pt !important; }
@@ -226,17 +175,13 @@
   .totals-strip { padding: 0.5rem !important; }
   .total-chip { border: 1px solid #333 !important; background: #f9f9f9 !important; }
 }
-
-/* ── Responsive ───────────────────────────────────────────────────────────── */
 @media (max-width: 1100px) { .top-row { grid-template-columns: 1fr 1fr; } }
-
 @media (max-width: 768px) {
   .top-row { grid-template-columns: 1fr; }
   .table-header { flex-direction: column; align-items: flex-start; }
   .table-actions { width: 100%; flex-wrap: wrap; }
   .totals-strip { grid-template-columns: 1fr; }
 }
-
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
   to   { opacity: 1; transform: translateY(0); }

@@ -5,7 +5,6 @@
 
 .ot-page { max-width: 1300px; margin: 0 auto; }
 
-/* ── Top row ──────────────────────────────────────────────────────────────── */
 .top-row {
   display: grid;
   grid-template-columns: 1.2fr 0.8fr 0.8fr;
@@ -34,13 +33,11 @@
 .card-label { font-weight: 500; font-size: 0.85rem; color: #334155; }
 .card-sublabel { font-size: 0.7rem; color: #94a3b8; }
 
-/* ── Selector ─────────────────────────────────────────────────────────────── */
 .wp-option { display: flex; align-items: center; gap: 0.6rem; padding: 0.25rem 0; }
 .wp-option i { color: #2563eb; font-size: 0.85rem; }
 .wp-name { font-weight: 600; font-size: 0.85rem; color: #1e293b; }
 .wp-address { font-size: 0.72rem; color: #94a3b8; }
 
-/* ── Period ────────────────────────────────────────────────────────────────── */
 .period-selectors { display: flex; gap: 0.5rem; }
 
 .native-select {
@@ -67,7 +64,6 @@
   box-shadow: 0 0 0 2px rgba(37,99,235,0.15);
 }
 
-/* ── Rate badge ───────────────────────────────────────────────────────────── */
 .rate-badge {
   display: inline-flex; align-items: baseline; gap: 0.25rem;
   color: #0f172a; padding: 0.2rem 0;
@@ -76,7 +72,6 @@
 .rate-per { font-size: 0.75rem; font-weight: 400; color: #64748b; }
 .loading-mini { padding: 1rem 0; color: #2563eb; font-size: 1.2rem; }
 
-/* ── Table container (reusing global patterns) ────────────────────────────── */
 .table-container {
   background: #ffffff; border-radius: 14px;
   border: 1px solid #e8ecf1; overflow: hidden;
@@ -93,7 +88,6 @@
 .table-actions { display: flex; align-items: center; gap: 0.5rem; }
 .print-rate-reference { display: none; }
 
-/* ── Spreadsheet table (native HTML) ──────────────────────────────────────── */
 .table-wrapper { overflow-x: auto; }
 .spreadsheet-table { width: 100%; border-collapse: collapse; }
 
@@ -119,7 +113,6 @@
 
 .th-center, .td-center { text-align: center; }
 
-/* ── Cell styles ──────────────────────────────────────────────────────────── */
 .guard-cell { display: flex; align-items: center; gap: 0.65rem; }
 .guard-name-text { font-weight: 600; font-size: 0.85rem; color: #1e293b; }
 
@@ -141,7 +134,7 @@
   border-color: #2563eb;
   box-shadow: 0 0 0 2px rgba(37,99,235,0.1);
 }
-/* Hide arrows in native number input */
+
 .native-input.hours-input::-webkit-outer-spin-button,
 .native-input.hours-input::-webkit-inner-spin-button {
   -webkit-appearance: none;
@@ -156,7 +149,6 @@
 
 .row-verified { background: rgba(5, 150, 105, 0.03); }
 
-/* ── Footer ───────────────────────────────────────────────────────────────── */
 .footer-row { background: #f8fafc; border-top: 2px solid #e8ecf1; }
 .footer-label {
   font-weight: 600; font-size: 0.85rem; color: #475569;
@@ -166,7 +158,6 @@
 .footer-value { font-weight: 700; font-size: 0.88rem; color: #1e293b; padding: 0.65rem 0.75rem; }
 .footer-grand-total { color: #059669; font-size: 1rem; }
 
-/* ── Loading & Empty ──────────────────────────────────────────────────────── */
 .loading-state {
   display: flex; align-items: center; justify-content: center;
   gap: 0.75rem; padding: 3rem 1rem; color: #64748b;
@@ -193,9 +184,6 @@
 .empty-placeholder h3 { font-size: 1.1rem; font-weight: 700; color: #1e293b; margin: 0; }
 .empty-placeholder p { font-size: 0.88rem; color: #94a3b8; margin: 0; }
 
-/* =========================================
-   PRINT — Clean PDF
-   ========================================= */
 @media print {
   .no-print { display: none !important; }
   body { background: #fff !important; font-size: 11pt !important; }
@@ -224,7 +212,6 @@
   .rate-badge { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 }
 
-/* ── Responsive ───────────────────────────────────────────────────────────── */
 @media (max-width: 1100px) { .top-row { grid-template-columns: 1fr 1fr; } }
 
 @media (max-width: 768px) {

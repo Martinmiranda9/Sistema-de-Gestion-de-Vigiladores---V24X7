@@ -2,7 +2,6 @@ import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChange
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-
 import { ButtonModule } from 'primeng/button';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { TimelineModule } from 'primeng/timeline';
@@ -10,12 +9,9 @@ import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { TagModule } from 'primeng/tag';
 import { TooltipModule } from 'primeng/tooltip';
-
 import { MessageService, ConfirmationService } from 'primeng/api';
-
 import { PayrollConfig, TimelineEvent } from '../../../core/models';
 
-/** Tipo de tarifa que maneja este componente */
 export type RateField = 'extraHourRate' | 'nightSurchargeRate' | 'holidayHourRate';
 
 @Component({
@@ -33,7 +29,6 @@ export type RateField = 'extraHourRate' | 'nightSurchargeRate' | 'holidayHourRat
 })
 export class RatePageComponent implements OnInit, OnChanges {
 
-  // ── Configuración ────────────────────────────────────────────────────────
   @Input() pageTitle = 'Tarifa';
   @Input() pageSubtitle = 'Gestioná el valor vigente, programá aumentos y consultá el historial';
   @Input() rateField: RateField = 'extraHourRate';
@@ -43,18 +38,15 @@ export class RatePageComponent implements OnInit, OnChanges {
   @Input() scheduleRoute = '/horas-extras/programar';
   @Input() simLabel = 'Simulá el monto de horas extras';
 
-  /** Datos crudos del backend ya cargados por el padre */
   @Input() configs: PayrollConfig[] = [];
   @Input() loading = true;
 
   @Output() deleteRequest = new EventEmitter<number>();
 
-  // ── State derivado ────────────────────────────────────────────────────────
   currentConfig: PayrollConfig | null = null;
   upcoming: PayrollConfig | null = null;
   history: TimelineEvent[] = [];
 
-  // ── Simulator ─────────────────────────────────────────────────────────────
   simHours = 0;
   simResult = 0;
 
@@ -90,12 +82,9 @@ export class RatePageComponent implements OnInit, OnChanges {
     const upcomingList = sorted.filter(c => new Date(c.validFrom) > today);
     this.upcoming = upcomingList.length > 0 ? upcomingList[upcomingList.length - 1] : null;
 
-    // Filtrar: solo mostrar registros donde ESTA tarifa realmente cambió
-    // Recorremos de más viejo a más nuevo y detectamos cambios
-    const chronological = [...sorted].reverse(); // más viejo primero
+    const chronological = [...sorted].reverse();
     const relevantIds = new Set<number>();
 
-    // El primero siempre es relevante
     if (chronological.length > 0) {
       relevantIds.add(chronological[0].id);
     }
@@ -108,7 +97,6 @@ export class RatePageComponent implements OnInit, OnChanges {
       }
     }
 
-    // También incluir siempre el vigente actual y los futuros
     if (this.currentConfig) relevantIds.add(this.currentConfig.id);
     upcomingList.forEach(c => relevantIds.add(c.id));
 
@@ -130,7 +118,6 @@ export class RatePageComponent implements OnInit, OnChanges {
     return (config as any)[this.rateField] as number;
   }
 
-  // ── Delete ─────────────────────────────────────────────────────────────────
   confirmDelete(event: TimelineEvent): void {
     if (event.isCurrent) {
       this.msgSvc.add({ severity: 'warn', summary: 'Atención', detail: 'No podés eliminar el valor vigente.' });
@@ -147,7 +134,6 @@ export class RatePageComponent implements OnInit, OnChanges {
     });
   }
 
-  // ── Cancel upcoming ────────────────────────────────────────────────────────
   confirmCancelUpcoming(): void {
     if (!this.upcoming) return;
     this.confirmSvc.confirm({
@@ -161,13 +147,11 @@ export class RatePageComponent implements OnInit, OnChanges {
     });
   }
 
-  // ── Simulator ─────────────────────────────────────────────────────────────
   calculate(): void {
     const rate = this.currentConfig ? this.getRate(this.currentConfig) : 0;
     this.simResult = this.simHours > 0 ? this.simHours * rate : 0;
   }
 
-  // ── Helpers (compartidos) ─────────────────────────────────────────────────
   formatCurrency(value: number): string {
     return new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 2 }).format(value);
   }

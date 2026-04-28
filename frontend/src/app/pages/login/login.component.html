@@ -1,10 +1,8 @@
 <p-toast position="top-right" />
 
 <div class="login-wrapper">
-  <!-- ==================== LADO IZQUIERDO — Formulario ==================== -->
   <div class="login-left">
     <div class="login-form-container">
-      <!-- Logo -->
       <div class="login-logo">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="48" height="48">
           <circle cx="32" cy="32" r="30" fill="none" stroke="#0f172a" stroke-width="3" />
@@ -19,30 +17,25 @@
         </svg>
       </div>
 
-      <!-- Título -->
       <h1 class="login-title"> Sistema de Gestión de Vigiladores - Vigil 24x7 SAS</h1>
       <p class="login-subtitle">
         ¿No tenés usuario?
         <a href="#" class="login-link">¡Creá uno!</a>
       </p>
 
-      <!-- Formulario -->
       <form (ngSubmit)="onLogin()" class="login-form">
-        <!-- Campo Email/Username -->
         <div class="field">
           <label for="username" class="field-label">Usuario</label>
           <input id="username" type="text" pInputText [(ngModel)]="username" name="username"
             placeholder="Nombre de usuario" class="w-full" autocomplete="username" />
         </div>
 
-        <!-- Campo Password -->
         <div class="field">
           <label for="password" class="field-label">Contraseña</label>
           <p-password id="password" [(ngModel)]="password" name="password" placeholder="Contraseña" [toggleMask]="true"
             [feedback]="false" styleClass="w-full" inputStyleClass="w-full" autocomplete="current-password" />
         </div>
 
-        <!-- Remember me + Forgot -->
         <div class="login-options">
           <div class="remember-me">
             <p-checkbox [(ngModel)]="rememberMe" name="rememberMe" [binary]="true" inputId="rememberMe" />
@@ -51,14 +44,12 @@
           <a href="#" class="forgot-link">¿Olvidaste tu contraseña?</a>
         </div>
 
-        <!-- Botón Login -->
         <p-button type="submit" label="Iniciar Sesión" icon="pi pi-sign-in" [loading]="loading"
           styleClass="login-btn w-full" />
       </form>
     </div>
   </div>
 
-  <!-- ==================== LADO DERECHO — Imagen ==================== -->
   <div class="login-right">
     <img src="vigillogin.jpg" alt="Vigilador de Seguridad" class="login-bg-image" />
   </div>

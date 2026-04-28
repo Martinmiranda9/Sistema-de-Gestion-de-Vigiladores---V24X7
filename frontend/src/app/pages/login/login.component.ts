@@ -62,7 +62,6 @@ export class LoginComponent {
           summary: '¡Bienvenido!',
           detail: 'Inicio de sesión exitoso.'
         });
-        // Navegar al dashboard después de un breve delay
         setTimeout(() => this.router.navigate(['/dashboard']), 800);
       },
       error: (err) => {

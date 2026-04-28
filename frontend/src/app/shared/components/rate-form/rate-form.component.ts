@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
@@ -11,15 +10,10 @@ import { ToastModule } from 'primeng/toast';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { DividerModule } from 'primeng/divider';
 import { MessageService } from 'primeng/api';
-
 import { PayrollConfigService } from '../../../core/services/payroll-config.service';
 import { RateField } from '../rate-page/rate-page.component';
 import { PayrollConfig, PayrollConfigCreate } from '../../../core/models';
 
-/**
- * Formulario compartido para actualizar o programar aumentos de cualquier tarifa.
- * Se configura automáticamente según la ruta (e.g. /hora-nocturna/actualizar).
- */
 @Component({
   selector: 'app-rate-form',
   standalone: true,
@@ -35,7 +29,6 @@ import { PayrollConfig, PayrollConfigCreate } from '../../../core/models';
 export class RateFormComponent implements OnInit {
   mode: 'actualizar' | 'programar' = 'actualizar';
 
-  // Configuración según tipo de tarifa — se setea en ngOnInit leyendo la ruta
   rateField: RateField = 'extraHourRate';
   rateLabel = 'hora extra';
   parentRoute = '/horas-extras';
@@ -70,15 +63,12 @@ export class RateFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Detectar tipo de tarifa y modo desde la URL
     const urlSegments = this.route.snapshot.url.map(s => s.path);
-    // Formato esperado: ['hora-nocturna', 'actualizar'] o ['horas-extras', 'programar']
     const base = urlSegments.length > 1 ? urlSegments[0] : '';
     const action = urlSegments[urlSegments.length - 1];
 
     this.mode = action === 'programar' ? 'programar' : 'actualizar';
 
-    // Determinar qué tarifa estamos editando
     if (base === 'hora-nocturna') {
       this.rateField = 'nightSurchargeRate';
       this.rateLabel = 'hora nocturna';
@@ -150,7 +140,6 @@ export class RateFormComponent implements OnInit {
 
     const targetDate = this.mode === 'actualizar' ? new Date() : (this.formData.validFrom as Date);
 
-    // Construir DTO: solo cambia la tarifa correspondiente
     const dto: PayrollConfigCreate = {
       normalHourRate: baseConfig.normalHourRate,
       nightSurchargeRate: baseConfig.nightSurchargeRate,
@@ -161,7 +150,6 @@ export class RateFormComponent implements OnInit {
       changedBy: this.formData.changedBy.trim() || undefined
     };
 
-    // Sobreescribir solo el campo que corresponde
     (dto as any)[this.rateField] = this.formData.rate as number;
 
     this.saving = true;

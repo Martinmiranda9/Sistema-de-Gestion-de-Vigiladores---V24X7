@@ -1,6 +1,3 @@
-/* =========================================
-   MAIN LAYOUT
-   ========================================= */
 :host {
   display: block;
   height: 100vh;
@@ -14,9 +11,6 @@
   background: #f4f6f9;
 }
 
-/* =========================================
-   CONTENT WRAPPER
-   ========================================= */
 .layout-content-wrapper {
   flex: 1;
   margin-left: 260px;
@@ -30,19 +24,13 @@
   margin-left: 72px;
 }
 
-/* =========================================
-   MAIN CONTENT AREA
-   ========================================= */
 .layout-main {
   flex: 1;
   padding: 1.5rem;
-  margin-top: 64px; /* navbar height */
+  margin-top: 64px;
   overflow-y: auto;
 }
 
-/* =========================================
-   RESPONSIVE
-   ========================================= */
 @media (max-width: 768px) {
   .layout-content-wrapper {
     margin-left: 0;

@@ -1,5 +1,4 @@
 <aside class="sidebar" [class.collapsed]="collapsed">
-  <!-- Logo & Brand -->
   <div class="sidebar-header">
     <div class="sidebar-brand" routerLink="/dashboard">
       <div class="brand-logo">
@@ -26,7 +25,6 @@
     </button>
   </div>
 
-  <!-- Navigation -->
   <nav class="sidebar-nav">
     <div class="nav-section" *ngFor="let section of menuSections">
       <span class="nav-section-title" *ngIf="!collapsed">{{ section.title }}</span>
@@ -51,7 +49,6 @@
     </div>
   </nav>
 
-  <!-- Footer -->
   <div class="sidebar-footer">
     <a class="nav-item" routerLink="/settings" routerLinkActive="active" pRipple
        [pTooltip]="collapsed ? 'Configuración' : ''" tooltipPosition="right">

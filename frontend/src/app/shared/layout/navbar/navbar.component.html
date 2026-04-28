@@ -1,11 +1,9 @@
 <header class="navbar" [style.left]="sidebarCollapsed ? '72px' : '260px'">
   <div class="navbar-left">
-    <!-- Mobile toggle -->
     <button class="mobile-toggle" (click)="toggleSidebar.emit()" pRipple>
       <i class="pi pi-bars"></i>
     </button>
 
-    <!-- Breadcrumb / Page title -->
     <div class="navbar-breadcrumb">
       <span class="breadcrumb-icon"><i class="pi pi-home"></i></span>
       <span class="breadcrumb-separator">/</span>
@@ -14,7 +12,6 @@
   </div>
 
   <div class="navbar-right">
-    <!-- Search -->
     <div class="navbar-search" [class.active]="searchActive">
       <button class="icon-btn" (click)="toggleSearch()" pRipple>
         <i class="pi pi-search"></i>
@@ -28,20 +25,16 @@
       />
     </div>
 
-    <!-- Notifications -->
     <button class="icon-btn" pRipple pBadge value="3" severity="danger">
       <i class="pi pi-bell"></i>
     </button>
 
-    <!-- Messages -->
     <button class="icon-btn" pRipple>
       <i class="pi pi-envelope"></i>
     </button>
 
-    <!-- Divider -->
     <div class="navbar-divider"></div>
 
-    <!-- User Profile -->
     <div class="user-profile">
       <p-avatar
         icon="pi pi-user"

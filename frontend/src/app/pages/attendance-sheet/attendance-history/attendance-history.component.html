@@ -1,0 +1,231 @@
+<p-toast></p-toast>
+
+<div class="ah-page">
+
+
+  <div class="page-header">
+    <div class="page-header-left">
+      <div class="page-icon-wrap">
+        <i class="pi pi-calendar"></i>
+      </div>
+      <div>
+        <h1 class="page-title">Planillas de Asistencia</h1>
+        <p class="page-subtitle">Consultá el historial de planillas por objetivo o vigilador</p>
+      </div>
+    </div>
+    <button pButton icon="pi pi-plus" label="Nueva planilla"
+      class="p-button-sm new-sheet-btn" (click)="goToNewSheet()"></button>
+  </div>
+
+
+  <div class="filters-card">
+    <div class="filters-row">
+
+
+      <div class="filter-group filter-search">
+        <label class="filter-label"><i class="pi pi-search"></i> Buscar</label>
+        <input type="text" [(ngModel)]="searchText" (input)="applyTextFilter()"
+          class="native-input" placeholder="Nombre, DNI u objetivo..." />
+      </div>
+
+
+      <div class="filter-group">
+        <label class="filter-label"><i class="pi pi-flag"></i> Objetivo</label>
+        <select [(ngModel)]="selectedWorkplaceId" (change)="onWorkplaceFilter()" class="native-select">
+          <option [ngValue]="null">Todos los objetivos</option>
+          <option *ngFor="let wp of workplaces" [ngValue]="wp.id">{{ wp.name }}</option>
+        </select>
+      </div>
+
+
+      <div class="filter-group">
+        <label class="filter-label"><i class="pi pi-user"></i> Vigilador</label>
+        <select [(ngModel)]="selectedGuardId" (change)="loadHistory()" class="native-select"
+          [disabled]="!selectedWorkplaceId">
+          <option [ngValue]="null">Todos los vigiladores</option>
+          <option *ngFor="let g of guards" [ngValue]="g.id">
+            {{ g.fullName || g.lastName + ', ' + g.firstName }}
+          </option>
+        </select>
+      </div>
+
+
+      <div class="filter-group filter-narrow">
+        <label class="filter-label"><i class="pi pi-calendar-minus"></i> Mes</label>
+        <select [(ngModel)]="selectedMonth" (change)="loadHistory()" class="native-select">
+          <option *ngFor="let m of months" [ngValue]="m.value">{{ m.label }}</option>
+        </select>
+      </div>
+
+
+      <div class="filter-group filter-narrow">
+        <label class="filter-label"><i class="pi pi-clock"></i> Año</label>
+        <input type="number" [(ngModel)]="selectedYear" (change)="loadHistory()"
+          class="native-input year-input" min="2020" max="2035" />
+      </div>
+
+    </div>
+  </div>
+
+
+  <div class="content-grid">
+
+
+    <div class="table-container">
+      <div class="table-header">
+        <div class="table-title">
+          <i class="pi pi-list"></i>
+          <span class="table-title-main">Planillas guardadas</span>
+          <span class="table-title-count" *ngIf="!loading">({{ filteredHistory.length }})</span>
+        </div>
+      </div>
+
+      <div class="loading-state" *ngIf="loading">
+        <i class="pi pi-spin pi-spinner"></i>
+        <span>Cargando planillas...</span>
+      </div>
+
+      <div class="table-wrapper" *ngIf="!loading">
+
+        <table class="data-table" *ngIf="filteredHistory.length > 0">
+          <thead>
+            <tr>
+              <th>Vigilador</th>
+              <th>Objetivo</th>
+              <th>Período</th>
+              <th class="th-center">Hs. Trab.</th>
+              <th class="th-center">Hs. Noct.</th>
+              <th class="th-center">Hs. Extra</th>
+              <th class="th-center">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let sheet of filteredHistory"
+              [class.row-selected]="selectedSheet?.id === sheet.id"
+              (click)="openDetail(sheet)" style="cursor:pointer">
+              <td>
+                <div class="guard-cell">
+                  <div class="guard-avatar">{{ sheet.securityGuardName[0] }}</div>
+                  <div>
+                    <div class="guard-name">{{ sheet.securityGuardName }}</div>
+                    <div class="guard-dni">DNI {{ sheet.securityGuardDNI }}</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="workplace-chip">
+                  <i class="pi pi-map-marker"></i>
+                  {{ sheet.workplaceName }}
+                </div>
+              </td>
+              <td>
+                <span class="period-badge">{{ monthLabel(sheet.month) }} {{ sheet.year }}</span>
+              </td>
+              <td class="td-center">
+                <span class="hours-value">{{ formatHours(sheet.totalWorkedHours) }}h</span>
+              </td>
+              <td class="td-center">
+                <span class="hours-value night">{{ formatHours(sheet.totalNightHours) }}h</span>
+              </td>
+              <td class="td-center">
+                <span class="hours-value extra">{{ formatHours(sheet.totalExtraHours) }}h</span>
+              </td>
+              <td class="td-center">
+                <button pButton icon="pi pi-eye" class="p-button-text p-button-sm p-button-info"
+                  pTooltip="Ver detalle" (click)="openDetail(sheet); $event.stopPropagation()"></button>
+                <button pButton icon="pi pi-trash" class="p-button-text p-button-sm p-button-danger"
+                  pTooltip="Eliminar" (click)="deleteSheet(sheet); $event.stopPropagation()"></button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="empty-state" *ngIf="filteredHistory.length === 0">
+          <div class="empty-icon-wrap"><i class="pi pi-inbox"></i></div>
+          <h3>Sin resultados</h3>
+          <p>No hay planillas para los filtros seleccionados.</p>
+          <button pButton icon="pi pi-plus" label="Cargar primera planilla"
+            class="p-button-sm p-button-outlined" (click)="goToNewSheet()"></button>
+        </div>
+
+      </div>
+    </div>
+
+
+    <div class="detail-card">
+      <div class="detail-header">
+        <i class="pi pi-file-edit"></i>
+        <span>Detalle de planilla</span>
+      </div>
+
+      <div class="loading-state" *ngIf="loadingDetail">
+        <i class="pi pi-spin pi-spinner"></i>
+        <span>Cargando...</span>
+      </div>
+
+      <ng-container *ngIf="!loadingDetail && selectedSheet">
+        <div class="detail-meta">
+          <div class="meta-row"><i class="pi pi-user"></i> <strong>Vigilador:</strong> {{ selectedSheet.securityGuardName }}</div>
+          <div class="meta-row"><i class="pi pi-id-card"></i> <strong>DNI:</strong> {{ selectedSheet.securityGuardDNI }}</div>
+          <div class="meta-row"><i class="pi pi-flag"></i> <strong>Objetivo:</strong> {{ selectedSheet.workplaceName }}</div>
+          <div class="meta-row"><i class="pi pi-calendar"></i> <strong>Período:</strong> {{ monthLabel(selectedSheet.month) }} {{ selectedSheet.year }}</div>
+        </div>
+
+        <div class="detail-totals">
+          <div class="total-pill">
+            <span class="total-pill-label">Hs. Trabajadas</span>
+            <span class="total-pill-value">{{ formatHours(selectedSheet.totalWorkedHours) }}h</span>
+          </div>
+          <div class="total-pill night">
+            <span class="total-pill-label">Hs. Nocturnas</span>
+            <span class="total-pill-value">{{ formatHours(selectedSheet.totalNightHours) }}h</span>
+          </div>
+          <div class="total-pill extra">
+            <span class="total-pill-label">Hs. Extra</span>
+            <span class="total-pill-value">{{ formatHours(selectedSheet.totalExtraHours) }}h</span>
+          </div>
+        </div>
+
+        <div class="detail-table-wrapper">
+          <table class="detail-table">
+            <thead>
+              <tr>
+                <th>Día</th>
+                <th>Entrada</th>
+                <th>Salida</th>
+                <th class="th-center">Franco</th>
+                <th class="th-center">Hs. Trab.</th>
+                <th class="th-center">Hs. Noct.</th>
+                <th class="th-center">Hs. Extra</th>
+                <th class="th-center">Hs. Fer.</th>
+                <th>Obs.</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of selectedSheet.rows"
+                [class.row-dayoff]="row.isDayOff">
+                <td class="day-cell">{{ row.day }}</td>
+                <td>{{ row.entry || '—' }}</td>
+                <td>{{ row.exit || '—' }}</td>
+                <td class="td-center">
+                  <span class="dayoff-badge" *ngIf="row.isDayOff">Franco</span>
+                </td>
+                <td class="td-center">{{ formatHours(row.workedHours) }}h</td>
+                <td class="td-center night-text">{{ formatHours(row.nightHours) }}h</td>
+                <td class="td-center extra-text">{{ formatHours(getDailyExtraHours(row)) }}h</td>
+                <td class="td-center" style="color: #ea580c">{{ formatHours(getDailyHolidayHours(row)) }}h</td>
+                <td class="notes-cell">{{ row.notes || '—' }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </ng-container>
+
+      <div class="empty-state" *ngIf="!loadingDetail && !selectedSheet">
+        <div class="empty-icon-wrap"><i class="pi pi-file-o"></i></div>
+        <p>Seleccioná una planilla del listado para ver su detalle.</p>
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -3,7 +3,6 @@
 
 <div class="overtime-page">
 
-  <!-- ══ HEADER ══════════════════════════════════════════════════════════════ -->
   <div class="page-header">
     <div>
       <h1 class="page-title">{{ pageTitle }}</h1>
@@ -11,7 +10,6 @@
     </div>
   </div>
 
-  <!-- ══ LOADING ═════════════════════════════════════════════════════════════ -->
   <div class="loading-state" *ngIf="loading">
     <i class="pi pi-spin pi-spinner"></i>
     <span>Cargando configuración...</span>
@@ -19,13 +17,10 @@
 
   <ng-container *ngIf="!loading">
 
-    <!-- ══ CONTENT PROJECTION: Cards extra antes del top-row ══════════════ -->
     <ng-content select="[slot=before-cards]"></ng-content>
 
-    <!-- ══ TOP ROW ═══════════════════════════════════════════════════════ -->
     <div class="top-row">
 
-      <!-- CARD — Valor actual -->
       <div class="info-card current-card">
         <div class="card-header">
           <div class="card-icon-wrap icon-blue">
@@ -53,7 +48,6 @@
         </div>
       </div>
 
-      <!-- CARD — Próximo aumento -->
       <div class="info-card upcoming-card">
         <div class="card-header">
           <div class="card-icon-wrap icon-green">
@@ -86,7 +80,6 @@
         </div>
       </div>
 
-      <!-- CARD — Calculadora -->
       <div class="info-card sim-card">
         <div class="card-header">
           <div class="card-icon-wrap icon-purple">
@@ -114,10 +107,8 @@
 
     </div>
 
-    <!-- ══ CONTENT PROJECTION: Cards extra después del top-row ═══════════ -->
     <ng-content select="[slot=after-cards]"></ng-content>
 
-    <!-- ══ TIMELINE — Historial ═════════════════════════════════════════ -->
     <div class="table-container">
       <div class="table-header">
         <div class="table-title">

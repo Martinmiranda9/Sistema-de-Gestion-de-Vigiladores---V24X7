@@ -84,26 +84,26 @@ export class DashboardComponent implements OnInit {
     },
     {
       title: 'Hora Extra',
-      value: '$4.850',
+      value: '-',
       subtitle: 'Valor actual por hora',
       icon: 'pi pi-dollar',
-      lastUpdate: new Date(2026, 3, 1), // 01/04/2026
+      lastUpdate: new Date(),
       color: '#059669'
     },
     {
       title: 'Hora Nocturna',
-      value: '$5.620',
+      value: '-',
       subtitle: 'Valor actual por hora',
       icon: 'pi pi-moon',
-      lastUpdate: new Date(2026, 3, 1), // 01/04/2026
+      lastUpdate: new Date(),
       color: '#7c3aed'
     },
     {
       title: 'Hora Feriada',
-      value: '$7.275',
+      value: '-',
       subtitle: 'Valor actual por hora',
       icon: 'pi pi-star',
-      lastUpdate: new Date(2026, 3, 1), // 01/04/2026
+      lastUpdate: new Date(),
       color: '#ea580c'
     }
   ];

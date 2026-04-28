@@ -1,10 +1,8 @@
 <p-toast></p-toast>
 
 <div class="add-guard-page">
-  <!-- Breadcrumb -->
   <p-breadcrumb [model]="breadcrumbItems" [home]="breadcrumbHome" styleClass="custom-breadcrumb"></p-breadcrumb>
 
-  <!-- Page Header -->
   <div class="form-header">
     <div class="header-left">
       <div class="header-icon">
@@ -17,7 +15,6 @@
     </div>
   </div>
 
-  <!-- Form Card -->
   <div class="form-card">
     <div class="card-section">
       <div class="section-label">
@@ -26,7 +23,6 @@
       </div>
 
       <div class="form-grid">
-        <!-- Valor por hora -->
         <div class="form-group">
           <label for="rate">Nuevo valor por {{ rateLabel }} <span class="required">*</span></label>
           <p-inputNumber
@@ -42,7 +38,6 @@
           </p-inputNumber>
         </div>
 
-        <!-- Fecha de vigencia (solo si es programar) -->
         <div class="form-group" *ngIf="mode === 'programar'">
           <label for="validFrom">Fecha de vigencia <span class="required">*</span></label>
           <p-datepicker
@@ -80,7 +75,6 @@
       </div>
     </div>
 
-    <!-- Info note -->
     <div class="info-note" *ngIf="mode === 'actualizar'">
       <i class="pi pi-info-circle"></i>
       <span>Se creará un nuevo registro con vigencia <strong>desde hoy</strong>. El valor actual pasará automáticamente al historial.</span>
@@ -90,7 +84,6 @@
       <span>El sistema aplicará este valor automáticamente en la <strong>fecha programada</strong>.</span>
     </div>
 
-    <!-- Actions -->
     <div class="form-actions">
       <button pButton label="Cancelar" icon="pi pi-times" class="p-button-text btn-cancel"
         (click)="cancel()" [disabled]="saving"></button>

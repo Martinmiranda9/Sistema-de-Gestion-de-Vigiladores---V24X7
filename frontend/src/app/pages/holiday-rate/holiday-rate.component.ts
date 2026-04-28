@@ -29,16 +29,13 @@ import { Holiday, HolidayCreate, PayrollConfig } from '../../core/models';
   styleUrl: './holiday-rate.component.css'
 })
 export class HolidayRateComponent implements OnInit {
-  // ── Payroll configs ────────────────────
   configs: PayrollConfig[] = [];
   loading = true;
 
-  // ── Holidays management ────────────────
   holidays: Holiday[] = [];
   loadingHolidays = true;
   currentYear: number;
 
-  // ── Dialog for adding/editing holidays ──
   holidayDialogVisible = false;
   editingHoliday: Holiday | null = null;
   holidayForm: HolidayCreate = {
@@ -63,7 +60,6 @@ export class HolidayRateComponent implements OnInit {
     this.loadHolidays();
   }
 
-  // ── Payroll ────────────────────────────
   loadConfigs(): void {
     this.loading = true;
     this.payrollSvc.getAll().subscribe({
@@ -88,7 +84,6 @@ export class HolidayRateComponent implements OnInit {
     });
   }
 
-  // ── Holidays ───────────────────────────
   loadHolidays(): void {
     this.loadingHolidays = true;
     this.holidaySvc.getByYear(this.currentYear).subscribe({

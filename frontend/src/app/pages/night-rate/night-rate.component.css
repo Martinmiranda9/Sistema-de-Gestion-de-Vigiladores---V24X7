@@ -3,7 +3,6 @@
   animation: fadeIn 0.35s ease forwards;
 }
 
-/* ── Banner de horario nocturno ───────────────────────────────────────────── */
 .night-info-banner {
   display: flex;
   align-items: center;

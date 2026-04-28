@@ -15,7 +15,6 @@
   (deleteRequest)="onDeleteConfig($event)">
 </app-rate-page>
 
-<!-- ══ CARD — Calendario de feriados ═════════════════════════════════════════ -->
 <div class="holidays-section">
   <div class="holidays-container">
     <div class="holidays-header">
@@ -34,13 +33,11 @@
       </div>
     </div>
 
-    <!-- Loading -->
     <div class="loading-state" *ngIf="loadingHolidays">
       <i class="pi pi-spin pi-spinner"></i>
       <span>Cargando feriados...</span>
     </div>
 
-    <!-- List -->
     <div class="holidays-list" *ngIf="!loadingHolidays && holidays.length > 0">
       <div class="holiday-row" *ngFor="let h of holidays" [class.holiday-past]="isPast(h.date)">
         <div class="holiday-date-col">
@@ -63,7 +60,6 @@
       </div>
     </div>
 
-    <!-- Empty -->
     <div class="empty-state" *ngIf="!loadingHolidays && holidays.length === 0">
       <i class="pi pi-calendar"></i>
       <span>No hay feriados cargados para {{ currentYear }}</span>
@@ -71,7 +67,6 @@
   </div>
 </div>
 
-<!-- ══ DIALOG — Agregar / Editar feriado ═════════════════════════════════════ -->
 <p-dialog
   [(visible)]="holidayDialogVisible"
   [modal]="true"

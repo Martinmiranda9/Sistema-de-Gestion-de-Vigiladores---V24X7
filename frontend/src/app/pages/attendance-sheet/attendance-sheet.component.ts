@@ -1,13 +1,17 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 import { TooltipModule } from 'primeng/tooltip';
 
 import { MessageService } from 'primeng/api';
-import { AttendanceDayRow } from '../../core/models';
+import type { AttendanceSheetRow, SecurityGuard, Workplace, AttendanceSheetCreatePayload } from '../../core/models';
+import { WorkplaceService } from '../../core/services/workplace.service';
+import { SecurityGuardService } from '../../core/services/security-guard.service';
+import { AttendanceSheetService } from '../../core/services/attendance-sheet.service';
 
 @Component({
   selector: 'app-attendance-sheet',
@@ -20,32 +24,76 @@ import { AttendanceDayRow } from '../../core/models';
   templateUrl: './attendance-sheet.component.html',
   styleUrl: './attendance-sheet.component.css'
 })
-export class AttendanceSheetComponent {
+export class AttendanceSheetComponent implements OnInit {
 
-  // ── Header fields ──────────────────────────────────────────────────────────
   months = [
     'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
     'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
   ];
   selectedMonth: number;
   selectedYear: number;
-  guardName = '';
-  workplace = '';
+  
+  workplaces: Workplace[] = [];
+  selectedWorkplaceId: number | null = null;
+  loadingWorkplaces = true;
 
-  // ── Table rows ─────────────────────────────────────────────────────────────
-  rows: AttendanceDayRow[] = [];
+  guards: SecurityGuard[] = [];
+  selectedGuardId: number | null = null;
+  loadingGuards = false;
 
-  // ── State ──────────────────────────────────────────────────────────────────
+  rows: AttendanceSheetRow[] = [];
+
   saving = false;
 
-  constructor(private msgSvc: MessageService) {
+  constructor(
+    private router: Router,
+    private msgSvc: MessageService,
+    private workplaceSvc: WorkplaceService,
+    private guardSvc: SecurityGuardService,
+    private attendanceSvc: AttendanceSheetService
+  ) {
     const now = new Date();
     this.selectedMonth = now.getMonth();
     this.selectedYear = now.getFullYear();
     this.buildRows();
   }
 
-  // ── Build/rebuild the 31-day grid ──────────────────────────────────────────
+  ngOnInit(): void {
+    this.loadWorkplaces();
+  }
+
+  loadWorkplaces(): void {
+    this.loadingWorkplaces = true;
+    this.workplaceSvc.getAll().subscribe({
+      next: (data: Workplace[]) => {
+        this.workplaces = data.filter((w: Workplace) => w.isActive);
+        this.loadingWorkplaces = false;
+      },
+      error: (_err: unknown) => {
+        this.msgSvc.add({ severity: 'error', summary: 'Error', detail: 'No se pudieron cargar los objetivos.' });
+        this.loadingWorkplaces = false;
+      }
+    });
+  }
+
+  onWorkplaceChange(): void {
+    this.selectedGuardId = null;
+    this.guards = [];
+    if (!this.selectedWorkplaceId) return;
+
+    this.loadingGuards = true;
+    this.guardSvc.getByWorkplace(this.selectedWorkplaceId).subscribe({
+      next: (data: SecurityGuard[]) => {
+        this.guards = data.filter((g: SecurityGuard) => g.isActive);
+        this.loadingGuards = false;
+      },
+      error: (_err: unknown) => {
+        this.msgSvc.add({ severity: 'error', summary: 'Error', detail: 'No se pudieron cargar los vigiladores del objetivo.' });
+        this.loadingGuards = false;
+      }
+    });
+  }
+
   buildRows(): void {
     this.rows = Array.from({ length: 31 }, (_, i) => ({
       day: i + 1,
@@ -62,8 +110,7 @@ export class AttendanceSheetComponent {
     this.buildRows();
   }
 
-  // ── Day-off toggle ─────────────────────────────────────────────────────────
-  toggleDayOff(row: AttendanceDayRow): void {
+  toggleDayOff(row: AttendanceSheetRow): void {
     if (row.isDayOff) {
       row.entry = '';
       row.exit = '';
@@ -72,8 +119,7 @@ export class AttendanceSheetComponent {
     }
   }
 
-  // ── Time calculation ───────────────────────────────────────────────────────
-  onTimeChange(row: AttendanceDayRow): void {
+  onTimeChange(row: AttendanceSheetRow): void {
     if (row.isDayOff || !row.entry || !row.exit) {
       row.workedHours = 0;
       row.nightHours = 0;
@@ -95,7 +141,6 @@ export class AttendanceSheetComponent {
       : (1440 - entryMin) + exitMin;
     row.workedHours = Math.round((worked / 60) * 100) / 100;
 
-    // Night hours (21:00–06:00)
     row.nightHours = this.calcNightMinutes(entryMin, exitMin) / 60;
     row.nightHours = Math.round(row.nightHours * 100) / 100;
   }
@@ -111,12 +156,10 @@ export class AttendanceSheetComponent {
     let nightMin = 0;
 
     if (exit > entry) {
-      // Same-day shift
       for (let m = entry; m < exit; m++) {
         if (m >= nightStart || m < nightEnd) nightMin++;
       }
     } else {
-      // Midnight-crossing shift
       for (let m = entry; m < 1440; m++) {
         if (m >= nightStart) nightMin++;
       }
@@ -127,7 +170,6 @@ export class AttendanceSheetComponent {
     return nightMin;
   }
 
-  // ── Computed totals ────────────────────────────────────────────────────────
   get totalWorkedHours(): number {
     return this.rows.reduce((s, r) => s + r.workedHours, 0);
   }
@@ -144,32 +186,65 @@ export class AttendanceSheetComponent {
     return `${this.months[this.selectedMonth]} ${this.selectedYear}`;
   }
 
-  // ── Actions ────────────────────────────────────────────────────────────────
   saveSheet(): void {
-    if (!this.guardName.trim() || !this.workplace.trim()) {
-      this.msgSvc.add({ severity: 'warn', summary: 'Atención', detail: 'Completá Apellido/Nombre y Objetivo.' });
+    if (!this.selectedWorkplaceId || !this.selectedGuardId) {
+      this.msgSvc.add({ severity: 'warn', summary: 'Atención', detail: 'Seleccioná un Objetivo y un Vigilador.' });
       return;
     }
+
+    if (this.totalWorkedHours === 0) {
+      this.msgSvc.add({ severity: 'warn', summary: 'Atención', detail: 'La planilla no tiene horas registradas.' });
+      return;
+    }
+
+    const payload: AttendanceSheetCreatePayload = {
+      securityGuardId: this.selectedGuardId,
+      workplaceId: this.selectedWorkplaceId,
+      month: this.selectedMonth + 1,
+      year: this.selectedYear,
+      totalWorkedHours: this.totalWorkedHours,
+      totalNightHours: this.totalNightHours,
+      totalExtraHours: this.totalExtraHours,
+      rows: this.rows.map(r => ({
+        day: r.day,
+        entry: r.entry,
+        exit: r.exit,
+        isDayOff: r.isDayOff,
+        workedHours: r.workedHours,
+        nightHours: r.nightHours,
+        notes: r.notes
+      }))
+    };
+
     this.saving = true;
-    // TODO: Connect to backend service
-    setTimeout(() => {
-      this.saving = false;
-      this.msgSvc.add({ severity: 'success', summary: 'Guardado', detail: 'Planilla de asistencia guardada correctamente.' });
-    }, 600);
+    this.attendanceSvc.create(payload).subscribe({
+      next: () => {
+        this.saving = false;
+        this.msgSvc.add({ severity: 'success', summary: 'Guardado', detail: 'Planilla guardada correctamente.' });
+        setTimeout(() => this.router.navigate(['/calendario']), 1000);
+      },
+      error: (err: { error?: { message?: string } }) => {
+        this.saving = false;
+        this.msgSvc.add({ severity: 'error', summary: 'Error', detail: err.error?.message || 'No se pudo guardar la planilla.' });
+      }
+    });
   }
 
   clearSheet(): void {
-    this.guardName = '';
-    this.workplace = '';
+    this.selectedWorkplaceId = null;
+    this.selectedGuardId = null;
+    this.guards = [];
     this.buildRows();
-    this.msgSvc.add({ severity: 'info', summary: 'Limpiado', detail: 'Planilla limpiada.' });
+  }
+
+  goBack(): void {
+    this.router.navigate(['/calendario']);
   }
 
   printSheet(): void {
     window.print();
   }
 
-  // ── Helpers ────────────────────────────────────────────────────────────────
   formatHours(value: number): string {
     return value.toFixed(2);
   }

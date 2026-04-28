@@ -1,6 +1,3 @@
-/* =========================================
-   SIDEBAR — Variables
-   ========================================= */
 :host {
   --sidebar-width: 260px;
   --sidebar-collapsed-width: 72px;
@@ -16,9 +13,6 @@
   height: 100%;
 }
 
-/* =========================================
-   SIDEBAR — Container
-   ========================================= */
 .sidebar {
   width: var(--sidebar-width);
   height: 100vh;
@@ -38,9 +32,6 @@
   width: var(--sidebar-collapsed-width);
 }
 
-/* =========================================
-   HEADER — Logo + Collapse
-   ========================================= */
 .sidebar-header {
   display: flex;
   align-items: center;
@@ -115,9 +106,6 @@
   margin: 0 auto;
 }
 
-/* =========================================
-   NAVIGATION
-   ========================================= */
 .sidebar-nav {
   flex: 1;
   overflow-y: auto;
@@ -128,7 +116,6 @@
   gap: 0.25rem;
 }
 
-/* Scrollbar estilizada */
 .sidebar-nav::-webkit-scrollbar {
   width: 3px;
 }
@@ -138,7 +125,6 @@
   border-radius: 3px;
 }
 
-/* Sección */
 .nav-section {
   margin-bottom: 0.5rem;
 }
@@ -160,7 +146,6 @@
   margin: 0.5rem 0.75rem;
 }
 
-/* Item de navegación */
 .nav-item {
   display: flex;
   align-items: center;
@@ -235,9 +220,6 @@
   text-align: center;
 }
 
-/* =========================================
-   FOOTER
-   ========================================= */
 .sidebar-footer {
   border-top: 1px solid var(--sidebar-border);
   padding: 0.65rem;
@@ -255,9 +237,6 @@
   color: #ef4444 !important;
 }
 
-/* =========================================
-   COLLAPSED STATE
-   ========================================= */
 .sidebar.collapsed .nav-label,
 .sidebar.collapsed .brand-text,
 .sidebar.collapsed .nav-badge,
@@ -285,9 +264,6 @@
   justify-content: center;
 }
 
-/* =========================================
-   RESPONSIVE
-   ========================================= */
 @media (max-width: 768px) {
   .sidebar {
     transform: translateX(-100%);

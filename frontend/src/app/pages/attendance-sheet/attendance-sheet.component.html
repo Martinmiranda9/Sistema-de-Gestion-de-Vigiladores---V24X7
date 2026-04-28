@@ -2,48 +2,61 @@
 
 <div class="att-page">
 
-  <!-- ══ HEADER ═══════════════════════════════════════════════════════════════ -->
+
   <div class="page-header">
-    <div>
-      <h1 class="page-title">Planilla de Asistencia</h1>
-      <p class="page-subtitle">Control de horarios de vigiladores — registro diario</p>
+    <div class="page-header-left">
+      <button pButton icon="pi pi-arrow-left" class="p-button-text p-button-sm back-btn"
+        pTooltip="Volver al historial" (click)="goBack()"></button>
+      <div>
+        <h1 class="page-title">Nueva Planilla de Asistencia</h1>
+        <p class="page-subtitle">Control de horarios de vigiladores — registro diario</p>
+      </div>
     </div>
   </div>
 
-  <!-- ══ TOP ROW — Header fields ══════════════════════════════════════════════ -->
+
   <div class="top-row">
 
-    <!-- CARD: Vigilador -->
-    <div class="info-card">
-      <div class="card-header">
-        <div class="card-icon-wrap icon-blue"><i class="pi pi-user"></i></div>
-        <div>
-          <div class="card-label">Vigilador</div>
-          <div class="card-sublabel">Apellido y nombre</div>
-        </div>
-      </div>
-      <div class="card-body">
-        <input type="text" [(ngModel)]="guardName" class="native-input"
-          placeholder="Ej: Miranda, Martín" />
-      </div>
-    </div>
 
-    <!-- CARD: Objetivo -->
-    <div class="info-card">
+    <div class="info-card selector-card">
       <div class="card-header">
         <div class="card-icon-wrap icon-green"><i class="pi pi-flag"></i></div>
         <div>
           <div class="card-label">Objetivo</div>
-          <div class="card-sublabel">Lugar de trabajo</div>
+          <div class="card-sublabel">Seleccioná el lugar de trabajo</div>
         </div>
       </div>
       <div class="card-body">
-        <input type="text" [(ngModel)]="workplace" class="native-input"
-          placeholder="Ej: Banco Central" />
+        <select [(ngModel)]="selectedWorkplaceId" class="native-select"
+          (change)="onWorkplaceChange()">
+          <option [ngValue]="null" disabled>Elegí un objetivo...</option>
+          <option *ngFor="let wp of workplaces" [ngValue]="wp.id">
+            {{ wp.name }}
+          </option>
+        </select>
       </div>
     </div>
 
-    <!-- CARD: Período -->
+
+    <div class="info-card selector-card">
+      <div class="card-header">
+        <div class="card-icon-wrap icon-blue"><i class="pi pi-user"></i></div>
+        <div>
+          <div class="card-label">Vigilador</div>
+          <div class="card-sublabel">Seleccioná el vigilador</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <select [(ngModel)]="selectedGuardId" class="native-select" [disabled]="!selectedWorkplaceId">
+          <option [ngValue]="null" disabled>Elegí un vigilador...</option>
+          <option *ngFor="let g of guards" [ngValue]="g.id">
+            {{ g.fullName || g.lastName + ', ' + g.firstName }}
+          </option>
+        </select>
+      </div>
+    </div>
+
+
     <div class="info-card">
       <div class="card-header">
         <div class="card-icon-wrap icon-purple"><i class="pi pi-calendar"></i></div>
@@ -63,7 +76,7 @@
 
   </div>
 
-  <!-- ══ TABLE SECTION ═══════════════════════════════════════════════════════ -->
+
   <div class="table-container">
     <div class="table-header">
       <div class="table-title">
@@ -83,7 +96,7 @@
       </div>
     </div>
 
-    <!-- Table -->
+
     <div class="table-wrapper">
       <table class="data-table attendance-table">
         <thead>
@@ -148,7 +161,7 @@
       </table>
     </div>
 
-    <!-- Totals summary cards -->
+
     <div class="totals-strip">
       <div class="total-chip">
         <i class="pi pi-clock"></i>
@@ -173,7 +186,7 @@
       </div>
     </div>
 
-    <!-- Info note -->
+
     <div class="info-note">
       <i class="pi pi-info-circle"></i>
       <span><strong>Horas Nocturnas:</strong> Se calculan las horas trabajadas entre las 21:00 y las 06:00 hs.</span>

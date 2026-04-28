@@ -1,14 +1,8 @@
-/* =========================================
-   NAVBAR — Variables
-   ========================================= */
 :host {
   display: block;
   width: 100%;
 }
 
-/* =========================================
-   NAVBAR — Container
-   ========================================= */
 .navbar {
   position: fixed;
   top: 0;
@@ -24,9 +18,6 @@
   transition: left 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* =========================================
-   LEFT SIDE
-   ========================================= */
 .navbar-left {
   display: flex;
   align-items: center;
@@ -52,7 +43,6 @@
   background: #f1f5f9;
 }
 
-/* Breadcrumb */
 .navbar-breadcrumb {
   display: flex;
   align-items: center;
@@ -75,16 +65,12 @@
   font-weight: 600;
 }
 
-/* =========================================
-   RIGHT SIDE
-   ========================================= */
 .navbar-right {
   display: flex;
   align-items: center;
   gap: 0.4rem;
 }
 
-/* Icon buttons */
 .icon-btn {
   width: 38px;
   height: 38px;
@@ -106,7 +92,6 @@
   color: #1e293b;
 }
 
-/* PrimeNG Badge override para los icon buttons */
 :host ::ng-deep .icon-btn .p-badge {
   position: absolute;
   top: 4px;
@@ -118,7 +103,6 @@
   padding: 0 4px;
 }
 
-/* Search */
 .navbar-search {
   display: flex;
   align-items: center;
@@ -153,7 +137,6 @@
   }
 }
 
-/* Divider */
 .navbar-divider {
   width: 1px;
   height: 28px;
@@ -161,9 +144,6 @@
   margin: 0 0.5rem;
 }
 
-/* =========================================
-   USER PROFILE
-   ========================================= */
 .user-profile {
   display: flex;
   align-items: center;
@@ -203,9 +183,6 @@
   margin-left: 0.15rem;
 }
 
-/* =========================================
-   RESPONSIVE
-   ========================================= */
 @media (max-width: 768px) {
   .navbar {
     left: 0 !important;

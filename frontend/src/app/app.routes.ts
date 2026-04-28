@@ -14,6 +14,7 @@ import { RateFormComponent } from './shared/components/rate-form/rate-form.compo
 import { OvertimeSpreadsheetComponent } from './pages/overtime-spreadsheet/overtime-spreadsheet.component';
 import { OvertimeHistoryComponent } from './pages/overtime-history/overtime-history.component';
 import { AttendanceSheetComponent } from './pages/attendance-sheet/attendance-sheet.component';
+import { AttendanceHistoryComponent } from './pages/attendance-sheet/attendance-history/attendance-history.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -30,7 +31,8 @@ export const routes: Routes = [
       { path: 'objetivos/editar/:id', component: WorkplaceFormComponent },
       // Planilla
       { path: 'planilla/horas-extras', component: OvertimeSpreadsheetComponent },
-      { path: 'calendario', component: AttendanceSheetComponent },
+      { path: 'calendario', component: AttendanceHistoryComponent },
+      { path: 'calendario/nueva', component: AttendanceSheetComponent },
       { path: 'historico', component: OvertimeHistoryComponent },
       // Liquidación — Hora Extra
       { path: 'horas-extras', component: OvertimeComponent },
