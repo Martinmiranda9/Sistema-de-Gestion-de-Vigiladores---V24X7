@@ -2,7 +2,7 @@
 
 <div class="att-page">
 
-
+  <!-- ─── PAGE HEADER ───────────────────────────────────────── -->
   <div class="page-header">
     <div class="page-header-left">
       <button pButton icon="pi pi-arrow-left" class="p-button-text p-button-sm back-btn"
@@ -15,8 +15,101 @@
   </div>
 
 
-  <div class="top-row">
+  <!-- ─── OCR PANEL ────────────────────────────────────────── -->
+  <div class="ocr-card no-print">
+    <div class="ocr-card-header">
+      <div class="ocr-title-group">
+        <div class="ocr-icon-wrap">
+          <i class="pi pi-sparkles"></i>
+        </div>
+        <div>
+          <div class="ocr-title">Carga Automática via IA</div>
+          <div class="ocr-subtitle">Fotografiá la planilla manuscrita y Gemini extraerá los datos automáticamente</div>
+        </div>
+      </div>
+      <div class="ocr-badge">
+        <i class="pi pi-google"></i>
+        <span>Gemini Vision</span>
+      </div>
+    </div>
 
+    <div class="ocr-body">
+      <!-- Drop Zone -->
+      <div class="ocr-drop-zone"
+        [class.drag-over]="isDragOver"
+        [class.has-file]="ocrPreviewUrl"
+        (dragover)="onDragOver($event)"
+        (dragleave)="onDragLeave($event)"
+        (drop)="onDrop($event)"
+        (click)="!ocrPreviewUrl && fileInput.click()">
+
+        <ng-container *ngIf="!ocrPreviewUrl">
+          <div class="drop-zone-icon">
+            <i class="pi pi-image"></i>
+          </div>
+          <div class="drop-zone-text">
+            <span class="drop-zone-main">Arrastrá la imagen aquí</span>
+            <span class="drop-zone-sub">o hacé clic para buscar en tu dispositivo</span>
+          </div>
+          <div class="drop-zone-hint">
+            <i class="pi pi-info-circle"></i>
+            Formatos aceptados: JPG, PNG, WEBP
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="ocrPreviewUrl">
+          <div class="preview-container">
+            <img [src]="ocrPreviewUrl" alt="Planilla cargada" class="ocr-preview-img" />
+            <div class="preview-overlay" (click)="$event.stopPropagation()">
+              <button pButton icon="pi pi-times" class="p-button-danger p-button-rounded p-button-sm remove-btn"
+                pTooltip="Quitar imagen" (click)="clearOcr()"></button>
+            </div>
+          </div>
+          <div class="preview-filename">
+            <i class="pi pi-file-image"></i>
+            {{ ocrFile?.name }}
+          </div>
+        </ng-container>
+      </div>
+
+      <input #fileInput type="file" accept="image/jpeg,image/png,image/webp"
+        style="display:none" (change)="onFileSelected($event)" />
+
+      <!-- Action Button + Spinner -->
+      <div class="ocr-action">
+        <ng-container *ngIf="!ocrProcessing">
+          <button pButton
+            label="Procesar Planilla"
+            icon="pi pi-bolt"
+            class="btn-ocr-process"
+            [disabled]="!ocrFile"
+            (click)="processOcr()">
+          </button>
+          <p class="ocr-action-hint" *ngIf="!ocrFile">
+            <i class="pi pi-arrow-left"></i> Seleccioná una imagen primero
+          </p>
+          <p class="ocr-action-hint success" *ngIf="ocrFile">
+            <i class="pi pi-check-circle"></i> Imagen lista · Presioná "Procesar Planilla"
+          </p>
+        </ng-container>
+
+        <ng-container *ngIf="ocrProcessing">
+          <div class="ocr-loading">
+            <p-progressSpinner strokeWidth="4" animationDuration=".8s"
+              styleClass="ocr-spinner"></p-progressSpinner>
+            <div class="ocr-loading-text">
+              <span class="ocr-loading-main">Analizando imagen con Gemini...</span>
+              <span class="ocr-loading-sub">Esto puede tardar unos segundos</span>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ─── SELECTOR ROW ─────────────────────────────────────── -->
+  <div class="top-row">
 
     <div class="info-card selector-card">
       <div class="card-header">
@@ -37,7 +130,6 @@
       </div>
     </div>
 
-
     <div class="info-card selector-card">
       <div class="card-header">
         <div class="card-icon-wrap icon-blue"><i class="pi pi-user"></i></div>
@@ -55,7 +147,6 @@
         </select>
       </div>
     </div>
-
 
     <div class="info-card">
       <div class="card-header">
@@ -77,6 +168,7 @@
   </div>
 
 
+  <!-- ─── DATA TABLE ───────────────────────────────────────── -->
   <div class="table-container">
     <div class="table-header">
       <div class="table-title">
@@ -180,7 +272,7 @@
       <div class="total-chip extra-chip">
         <i class="pi pi-plus-circle"></i>
         <div>
-          <span class="chip-label">Hs. Extras (&gt;160)</span>
+          <span class="chip-label">Hs. Extras (>160)</span>
           <span class="chip-value">{{ formatHours(totalExtraHours) }}</span>
         </div>
       </div>

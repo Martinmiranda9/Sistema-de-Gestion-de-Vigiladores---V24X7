@@ -29,6 +29,7 @@
     "@angular/forms": "^20.2.0",
     "@angular/platform-browser": "^20.2.0",
     "@angular/router": "^20.2.0",
+    "@google/generative-ai": "^0.24.1",
     "@primeng/themes": "^21.0.4",
     "@primeuix/themes": "^2.0.3",
     "primeicons": "^7.0.0",

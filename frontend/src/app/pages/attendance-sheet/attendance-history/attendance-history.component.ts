@@ -42,7 +42,7 @@ export class AttendanceHistoryComponent implements OnInit {
   selectedWorkplaceId: number | null = null;
   selectedGuardId: number | null = null;
   selectedMonth: number = 0;
-  selectedYear: number = new Date().getFullYear();
+  selectedYear: number | null = new Date().getFullYear();
   searchText = '';
 
 
@@ -100,8 +100,9 @@ export class AttendanceHistoryComponent implements OnInit {
     const month = this.selectedMonth > 0 ? this.selectedMonth : undefined;
     const workplace = this.selectedWorkplaceId ?? undefined;
     const guard = this.selectedGuardId ?? undefined;
+    const year = this.selectedYear ? this.selectedYear : undefined;
 
-    this.attendanceSvc.getAll(workplace, guard, month, this.selectedYear).subscribe({
+    this.attendanceSvc.getAll(workplace, guard, month, year).subscribe({
       next: (data: AttendanceSheet[]) => {
         this.history = data;
         this.applyTextFilter();

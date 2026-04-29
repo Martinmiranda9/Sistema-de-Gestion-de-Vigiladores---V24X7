@@ -60,8 +60,8 @@
 
       <div class="filter-group filter-narrow">
         <label class="filter-label"><i class="pi pi-clock"></i> Año</label>
-        <input type="number" [(ngModel)]="selectedYear" (change)="loadHistory()"
-          class="native-input year-input" min="2020" max="2035" />
+        <input type="number" [(ngModel)]="selectedYear" (ngModelChange)="loadHistory()"
+          class="native-input year-input" min="2020" max="2035" placeholder="Todos" />
       </div>
 
     </div>

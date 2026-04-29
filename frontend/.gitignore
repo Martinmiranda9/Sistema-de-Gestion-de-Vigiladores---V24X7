@@ -40,3 +40,8 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+# ─── API KEYS & SECRETS ──────────────────────────────────────────
+# El archivo environment.ts contiene la clave de API de Gemini.
+# Usá environment.example.ts como plantilla sin la clave real.
+src/environments/environment.ts
