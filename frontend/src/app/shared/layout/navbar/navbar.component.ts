@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RippleModule } from 'primeng/ripple';
 import { BadgeModule } from 'primeng/badge';
-import { AvatarModule } from 'primeng/avatar';
+
 import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
@@ -12,7 +12,7 @@ import { InputTextModule } from 'primeng/inputtext';
     CommonModule,
     RippleModule,
     BadgeModule,
-    AvatarModule,
+
     InputTextModule
   ],
   templateUrl: './navbar.component.html',
@@ -23,7 +23,7 @@ export class NavbarComponent {
   @Output() toggleSidebar = new EventEmitter<void>();
 
   searchActive = false;
-  userName = 'Admin';
+  userName = 'Maria Moreno';
   userRole = 'Administrador';
 
   toggleSearch(): void {

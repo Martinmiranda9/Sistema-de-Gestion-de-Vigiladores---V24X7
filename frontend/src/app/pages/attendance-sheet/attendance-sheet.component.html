@@ -20,16 +20,16 @@
     <div class="ocr-card-header">
       <div class="ocr-title-group">
         <div class="ocr-icon-wrap">
-          <i class="pi pi-sparkles"></i>
+          <i class="pi pi-camera"></i>
         </div>
         <div>
-          <div class="ocr-title">Carga Automática via IA</div>
-          <div class="ocr-subtitle">Fotografiá la planilla manuscrita y Gemini extraerá los datos automáticamente</div>
+          <div class="ocr-title">Digitalización</div>
+          <div class="ocr-subtitle">Cargá una imagen de la planilla para extraer los datos automáticamente</div>
         </div>
       </div>
       <div class="ocr-badge">
-        <i class="pi pi-google"></i>
-        <span>Gemini Vision</span>
+        <i class="pi pi-eye"></i>
+        <span>Digitalización</span>
       </div>
     </div>
 
@@ -80,7 +80,6 @@
         <ng-container *ngIf="!ocrProcessing">
           <button pButton
             label="Procesar Planilla"
-            icon="pi pi-bolt"
             class="btn-ocr-process"
             [disabled]="!ocrFile"
             (click)="processOcr()">
@@ -88,9 +87,7 @@
           <p class="ocr-action-hint" *ngIf="!ocrFile">
             <i class="pi pi-arrow-left"></i> Seleccioná una imagen primero
           </p>
-          <p class="ocr-action-hint success" *ngIf="ocrFile">
-            <i class="pi pi-check-circle"></i> Imagen lista · Presioná "Procesar Planilla"
-          </p>
+
         </ng-container>
 
         <ng-container *ngIf="ocrProcessing">
@@ -98,7 +95,7 @@
             <p-progressSpinner strokeWidth="4" animationDuration=".8s"
               styleClass="ocr-spinner"></p-progressSpinner>
             <div class="ocr-loading-text">
-              <span class="ocr-loading-main">Analizando imagen con Gemini...</span>
+              <span class="ocr-loading-main">Procesando imagen...</span>
               <span class="ocr-loading-sub">Esto puede tardar unos segundos</span>
             </div>
           </div>

@@ -73,6 +73,7 @@ builder.Services.AddScoped<IHolidayRepository, HolidayRepository>();
 builder.Services.AddScoped<IShiftRecordRepository, ShiftRecordRepository>();
 builder.Services.AddScoped<IPayrollConfigRepository, PayrollConfigRepository>();
 builder.Services.AddScoped<IOvertimeSpreadsheetRepository, OvertimeSpreadsheetRepository>();
+builder.Services.AddScoped<IAttendanceSheetRepository, AttendanceSheetRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 // Services (Application)
@@ -82,7 +83,11 @@ builder.Services.AddScoped<IHolidayService, HolidayService>();
 builder.Services.AddScoped<IShiftRecordService, ShiftRecordService>();
 builder.Services.AddScoped<IPayrollConfigService, PayrollConfigService>();
 builder.Services.AddScoped<IOvertimeSpreadsheetService, OvertimeSpreadsheetService>();
+builder.Services.AddScoped<IAttendanceSheetService, AttendanceSheetService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+
+// Gemini Service + HttpClient
+builder.Services.AddHttpClient<IGeminiService, GeminiService>();
 
 // JWT Authentication
 var jwtKey = builder.Configuration["Jwt:Key"] ?? "default_super_secret_key_12345";

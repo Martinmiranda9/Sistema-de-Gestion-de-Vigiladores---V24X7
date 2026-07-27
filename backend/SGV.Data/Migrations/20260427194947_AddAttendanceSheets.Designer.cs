@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SGV.Data;
 
@@ -11,9 +12,11 @@ using SGV.Data;
 namespace SGV.Data.Migrations
 {
     [DbContext(typeof(SGVDbContext))]
-    partial class SGVDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260427194947_AddAttendanceSheets")]
+    partial class AddAttendanceSheets
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

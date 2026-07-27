@@ -154,6 +154,15 @@
   transition: background 0.18s ease;
 }
 
+.user-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 2px solid #e8ecf1;
+}
+
 .user-profile:hover {
   background: #f1f5f9;
 }

@@ -33,6 +33,20 @@ services:
       - sgv-network
     restart: unless-stopped
 
+  # --- FRONTEND ANGULAR (Docker) ---
+  sgv-frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    container_name: sgv-frontend
+    ports:
+      - "4200:80"
+    depends_on:
+      - sgv-api
+    networks:
+      - sgv-network
+    restart: unless-stopped
+
 networks:
   sgv-network:
     driver: bridge

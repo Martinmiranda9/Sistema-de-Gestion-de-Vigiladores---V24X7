@@ -14,6 +14,8 @@ public class SGVDbContext : DbContext
     public DbSet<PayrollConfig> PayrollConfigs => Set<PayrollConfig>();
     public DbSet<OvertimeSpreadsheet> OvertimeSpreadsheets => Set<OvertimeSpreadsheet>();
     public DbSet<OvertimeSpreadsheetRow> OvertimeSpreadsheetRows => Set<OvertimeSpreadsheetRow>();
+    public DbSet<AttendanceSheet> AttendanceSheets => Set<AttendanceSheet>();
+    public DbSet<AttendanceSheetRow> AttendanceSheetRows => Set<AttendanceSheetRow>();
     public DbSet<User> Users => Set<User>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -66,6 +68,26 @@ public class SGVDbContext : DbContext
                   .WithMany()
                   .HasForeignKey(r => r.SecurityGuardId)
                   .OnDelete(DeleteBehavior.SetNull);
+        });
+
+        modelBuilder.Entity<AttendanceSheet>(entity =>
+        {
+            entity.HasOne(s => s.SecurityGuard)
+                  .WithMany()
+                  .HasForeignKey(s => s.SecurityGuardId)
+                  .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(s => s.Workplace)
+                  .WithMany()
+                  .HasForeignKey(s => s.WorkplaceId)
+                  .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasMany(s => s.Rows)
+                  .WithOne(r => r.AttendanceSheet)
+                  .HasForeignKey(r => r.AttendanceSheetId)
+                  .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasIndex(s => new { s.Year, s.Month, s.SecurityGuardId }).IsUnique();
         });
 
         // Users — Seed admin user
