@@ -132,7 +132,8 @@ app.UseSwaggerUI(c =>
 });
 // ========================================
 
-app.UseHttpsRedirection();
+// CORS debe ir primero — antes de cualquier redirect o auth
+// Render maneja SSL externamente, no se necesita UseHttpsRedirection
 app.UseCors("AllowAngular");
 app.UseAuthentication();
 app.UseAuthorization();
