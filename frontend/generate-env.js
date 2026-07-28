@@ -41,6 +41,9 @@ export const environment = {
 // ─── Escribe el archivo ───────────────────────────────────────────────────────
 const outputPath = path.join(__dirname, 'src', 'environments', 'environment.prod.ts');
 
+// Crea el directorio si no existe (puede faltar en entornos CI/CD)
+fs.mkdirSync(path.dirname(outputPath), { recursive: true });
+
 fs.writeFileSync(outputPath, content, 'utf8');
 
 console.log('✅  environment.prod.ts generado correctamente');
