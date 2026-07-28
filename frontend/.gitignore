@@ -42,6 +42,7 @@ testem.log
 Thumbs.db
 
 # ─── API KEYS & SECRETS ──────────────────────────────────────────
-# El archivo environment.ts contiene la clave de API de Gemini.
-# Usá environment.example.ts como plantilla sin la clave real.
-src/environments/environment.ts
+# environment.prod.ts es generado automáticamente por generate-env.js
+# durante el build en Vercel. NUNCA debe subirse a GitHub.
+# Los valores reales viven en Vercel → Settings → Environment Variables.
+src/environments/environment.prod.ts
