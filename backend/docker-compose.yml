@@ -1,22 +1,22 @@
 services:
 
-  # --- BASE DE DATOS (Docker) ---
-  sqlserver:
-    image: mcr.microsoft.com/mssql/server:2022-latest
-    container_name: sgv-sqlserver
+  # --- BASE DE DATOS (PostgreSQL) ---
+  postgres:
+    image: postgres:16-alpine
+    container_name: sgv-postgres
     environment:
-      - ACCEPT_EULA=Y
-      - SA_PASSWORD=SGV_Pass123!
-      - MSSQL_PID=Developer
+      POSTGRES_DB: sgv_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     ports:
-      - "1434:1433"   # 1434 en tu PC → 1433 dentro del contenedor (evita conflicto con SQLEXPRESS local)
+      - "5432:5432"
     volumes:
-      - sgv_sqldata:/var/opt/mssql
+      - sgv_pgdata:/var/lib/postgresql/data
     networks:
       - sgv-network
     restart: unless-stopped
 
-  # --- API .NET (Docker) ---
+  # --- API .NET ---
   sgv-api:
     build:
       context: .
@@ -25,15 +25,18 @@ services:
     ports:
       - "8080:8080"
     environment:
-      # Apunta al contenedor sqlserver (por nombre de red interna, puerto 1433)
-      - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=SGV_DB;User Id=sa;Password=SGV_Pass123!;TrustServerCertificate=True
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=sgv_db;Username=postgres;Password=postgres
+      - AllowedOrigins=http://localhost:4200
+      - Jwt__Key=SuperSecretKeyParaSGV_Sistemas_9990234234_!
+      - Jwt__Issuer=SGV_API
+      - Jwt__Audience=SGV_Client
     depends_on:
-      - sqlserver
+      - postgres
     networks:
       - sgv-network
     restart: unless-stopped
 
-  # --- FRONTEND ANGULAR (Docker) ---
+  # --- FRONTEND ANGULAR ---
   sgv-frontend:
     build:
       context: ../frontend
@@ -52,5 +55,5 @@ networks:
     driver: bridge
 
 volumes:
-  sgv_sqldata:
+  sgv_pgdata:
     driver: local

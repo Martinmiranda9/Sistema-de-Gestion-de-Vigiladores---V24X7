@@ -47,20 +47,24 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-// Entity Framework Core — SQL Server
+// Entity Framework Core — PostgreSQL
 builder.Services.AddDbContext<SGVDbContext>(options =>
-    options.UseSqlServer(
+    options.UseNpgsql(
         builder.Configuration.GetConnectionString("DefaultConnection"),
         b => b.MigrationsAssembly("SGV.Data")
     )
 );
 
-// CORS — Angular dev server
+// CORS — orígenes permitidos desde configuración
+// En producción (Render) setear: AllowedOrigins=https://tu-app.vercel.app
+var allowedOrigins = builder.Configuration["AllowedOrigins"]?.Split(",", StringSplitOptions.RemoveEmptyEntries)
+    ?? new[] { "http://localhost:4200" };
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngular", policy =>
     {
-        policy.WithOrigins("http://localhost:4200")
+        policy.WithOrigins(allowedOrigins)
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
