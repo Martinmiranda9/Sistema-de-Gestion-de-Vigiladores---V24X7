@@ -123,6 +123,20 @@ using (var scope = app.Services.CreateScope())
 
 // ===== Middleware Pipeline =====
 
+// Manejador global de excepciones — debe ir ANTES de CORS para que
+// las respuestas de error (500) también incluyan los headers CORS.
+app.UseExceptionHandler(errApp =>
+{
+    errApp.Run(async ctx =>
+    {
+        ctx.Response.StatusCode = 500;
+        ctx.Response.ContentType = "application/json";
+        var feature = ctx.Features.Get<Microsoft.AspNetCore.Diagnostics.IExceptionHandlerFeature>();
+        var msg = feature?.Error?.Message ?? "Error interno del servidor.";
+        await ctx.Response.WriteAsJsonAsync(new { error = msg });
+    });
+});
+
 // ====== SE AGREGO ESTO PARA DOCKER ======
 // Habilitamos Swagger siempre
 app.UseSwagger();
