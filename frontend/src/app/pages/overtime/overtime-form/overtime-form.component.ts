@@ -38,13 +38,21 @@ export class OvertimeFormComponent implements OnInit {
   headerIcon = '';
 
   formData = {
+    // Hora extra (siempre visible)
     rate: null as number | null,
+    // Campos adicionales visibles solo en el modo "configuración inicial"
+    normalHourRate: null as number | null,
+    nightSurchargeRate: 0 as number,
+    holidayHourRate: null as number | null,
+    // Auditoría
     reason: '',
     changedBy: '',
     validFrom: null as Date | null
   };
 
   currentConfig: PayrollConfig | null = null;
+  /** true mientras se está cargando la config actual */
+  loadingConfig = true;
   saving = false;
 
   // Minimum date for scheduling
@@ -62,7 +70,6 @@ export class OvertimeFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Determine mode from route path
     const path = this.route.snapshot.url[this.route.snapshot.url.length - 1].path;
     this.mode = path === 'programar' ? 'programar' : 'actualizar';
 
@@ -92,21 +99,40 @@ export class OvertimeFormComponent implements OnInit {
   }
 
   loadCurrentConfig() {
+    this.loadingConfig = true;
     this.payrollSvc.getCurrent().subscribe({
       next: (config) => {
         this.currentConfig = config;
-        if (this.mode === 'actualizar') {
-          // Pre-fill with current value just for reference, though usually left blank to force explicit input
-        }
+        this.loadingConfig = false;
+        // Pre-rellenar todos los campos con los valores vigentes
+        this.formData.normalHourRate   = config.normalHourRate;
+        this.formData.nightSurchargeRate = config.nightSurchargeRate;
+        this.formData.holidayHourRate  = config.holidayHourRate;
+        this.formData.rate             = config.extraHourRate;
       },
       error: () => {
-        this.msgSvc.add({ severity: 'error', summary: 'Error', detail: 'No se pudo obtener la configuración actual. Podría no existir.' });
+        // Sin config previa → primer despliegue, mostrar formulario completo
+        this.currentConfig = null;
+        this.loadingConfig = false;
       }
     });
   }
 
+  /** true cuando no hay ninguna configuración previa (primer setup) */
+  get isFirstSetup(): boolean {
+    return !this.loadingConfig && this.currentConfig === null;
+  }
+
   get isFormValid(): boolean {
+    // La hora extra siempre es obligatoria
     if (!this.formData.rate || this.formData.rate <= 0) return false;
+
+    // En primer setup también exigimos hora normal y feriado
+    if (this.isFirstSetup) {
+      if (!this.formData.normalHourRate || this.formData.normalHourRate <= 0) return false;
+      if (!this.formData.holidayHourRate || this.formData.holidayHourRate <= 0) return false;
+    }
+
     if (this.mode === 'programar' && !this.formData.validFrom) return false;
     return true;
   }
@@ -117,26 +143,18 @@ export class OvertimeFormComponent implements OnInit {
 
   save() {
     if (!this.isFormValid) return;
-    
-    // If there is no current config to base off, we assume zeros for other rates since this is only handling ExtraHourRate
-    // Ideally the backend should allow partial updates or default to 0. 
-    // In this app context we resubmit current normal/night/holiday rates.
-    const baseConfig = this.currentConfig || {
-      normalHourRate: 0,
-      nightSurchargeRate: 0,
-      holidayHourRate: 0
-    };
 
-    const targetDate = this.mode === 'actualizar' ? new Date() : (this.formData.validFrom as Date);
-    
+    // Usar los valores del formulario siempre (no depender de currentConfig)
     const dto: PayrollConfigCreate = {
-      normalHourRate: baseConfig.normalHourRate,
-      nightSurchargeRate: baseConfig.nightSurchargeRate,
-      holidayHourRate: baseConfig.holidayHourRate,
-      extraHourRate: this.formData.rate as number,
-      validFrom: targetDate.toISOString().split('T')[0],
-      reason: this.formData.reason.trim() || undefined,
-      changedBy: this.formData.changedBy.trim() || undefined
+      normalHourRate:      this.formData.normalHourRate   ?? this.currentConfig!.normalHourRate,
+      nightSurchargeRate:  this.formData.nightSurchargeRate,
+      holidayHourRate:     this.formData.holidayHourRate  ?? this.currentConfig!.holidayHourRate,
+      extraHourRate:       this.formData.rate as number,
+      validFrom: this.mode === 'actualizar'
+        ? new Date().toISOString().split('T')[0]
+        : (this.formData.validFrom as Date).toISOString().split('T')[0],
+      reason:     this.formData.reason.trim()     || undefined,
+      changedBy:  this.formData.changedBy.trim()  || undefined
     };
 
     this.saving = true;

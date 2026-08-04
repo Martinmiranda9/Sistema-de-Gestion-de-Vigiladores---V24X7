@@ -104,5 +104,24 @@ public class SGVDbContext : DbContext
                 IsActive = true
             });
         });
+
+        // PayrollConfig — Seed configuración inicial del sistema
+        // Valores placeholder (> 0) para que la app funcione desde el primer deploy.
+        // El usuario los actualiza desde la pantalla "Horas Extras → Actualizar Valor".
+        modelBuilder.Entity<PayrollConfig>(entity =>
+        {
+            entity.HasData(new PayrollConfig
+            {
+                Id = 1,
+                NormalHourRate = 1000m,
+                NightSurchargeRate = 0m,
+                HolidayHourRate = 1500m,
+                ExtraHourRate = 1500m,
+                ValidFrom = new DateTime(2000, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                CreatedAt = new DateTime(2000, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                Reason = "Configuración inicial del sistema",
+                ChangedBy = "Sistema"
+            });
+        });
     }
 }

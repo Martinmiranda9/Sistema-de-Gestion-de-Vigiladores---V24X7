@@ -139,6 +139,18 @@
   margin-top: 1.25rem;
 }
 
+.info-note--warning {
+  background: #fffbeb;
+  border-color: #fcd34d;
+  color: #92400e;
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+.info-note--warning i {
+  color: #d97706 !important;
+}
+
 .info-note i {
   color: #2563eb;
   font-size: 0.95rem;
@@ -150,6 +162,11 @@
   color: #059669;
   font-weight: 700;
 }
+
+.info-note--warning strong {
+  color: #92400e;
+}
+
 
 /* Actions */
 .form-actions {
