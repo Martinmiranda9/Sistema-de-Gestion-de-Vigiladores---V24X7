@@ -9,6 +9,8 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { ToastModule } from 'primeng/toast';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { DividerModule } from 'primeng/divider';
+import { MessageModule } from 'primeng/message';
+import { TooltipModule } from 'primeng/tooltip';
 import { MessageService } from 'primeng/api';
 import { PayrollConfigService } from '../../../core/services/payroll-config.service';
 import { RateField } from '../rate-page/rate-page.component';
@@ -20,7 +22,7 @@ import { PayrollConfig, PayrollConfigCreate } from '../../../core/models';
   imports: [
     CommonModule, FormsModule,
     ButtonModule, InputTextModule, InputNumberModule, DatePickerModule,
-    ToastModule, BreadcrumbModule, DividerModule
+    ToastModule, BreadcrumbModule, DividerModule, MessageModule, TooltipModule
   ],
   providers: [MessageService],
   templateUrl: './rate-form.component.html',
@@ -48,6 +50,8 @@ export class RateFormComponent implements OnInit {
   };
 
   currentConfig: PayrollConfig | null = null;
+  configLoading = true;
+  configError = false;
   saving = false;
   minDate: Date;
 
@@ -110,15 +114,33 @@ export class RateFormComponent implements OnInit {
   }
 
   loadCurrentConfig() {
+    this.configLoading = true;
+    this.configError = false;
     this.payrollSvc.getCurrent().subscribe({
-      next: (config) => this.currentConfig = config,
-      error: () => {
-        this.msgSvc.add({ severity: 'error', summary: 'Error', detail: 'No se pudo obtener la configuración actual.' });
+      next: (config) => {
+        this.currentConfig = config;
+        this.configLoading = false;
+      },
+      error: (err) => {
+        this.configLoading = false;
+        // 404 = todavía no existe ninguna config (primer uso del sistema) → se permite guardar
+        // Cualquier otro error (500, timeout) → bloqueamos para evitar enviar ceros al backend
+        if (err?.status === 404) {
+          this.currentConfig = null;
+        } else {
+          this.configError = true;
+          this.msgSvc.add({
+            severity: 'error',
+            summary: 'Error de conexión',
+            detail: 'No se pudo obtener la configuración actual. Reintentá en unos segundos.'
+          });
+        }
       }
     });
   }
 
   get isFormValid(): boolean {
+    if (this.configLoading || this.configError) return false;
     if (!this.formData.rate || this.formData.rate <= 0) return false;
     if (this.mode === 'programar' && !this.formData.validFrom) return false;
     return true;
@@ -131,11 +153,14 @@ export class RateFormComponent implements OnInit {
   save() {
     if (!this.isFormValid) return;
 
-    const baseConfig = this.currentConfig || {
-      normalHourRate: 0,
+    // Si no hay config previa (primer uso del sistema), los rates no editados
+    // usan el mínimo válido (1) para no romper la validación del backend.
+    // El usuario puede actualizarlos individualmente desde cada sección.
+    const baseConfig = this.currentConfig ?? {
+      normalHourRate: 1,
       nightSurchargeRate: 0,
-      holidayHourRate: 0,
-      extraHourRate: 0
+      holidayHourRate: 1,
+      extraHourRate: 1
     };
 
     const targetDate = this.mode === 'actualizar' ? new Date() : (this.formData.validFrom as Date);

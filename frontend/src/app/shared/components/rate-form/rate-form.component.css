@@ -19,6 +19,29 @@
   margin: 0 auto;
 }
 
+.config-error-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(234, 179, 8, 0.1);
+  border: 1px solid rgba(234, 179, 8, 0.4);
+  border-radius: 8px;
+  padding: 0.85rem 1.1rem;
+  margin-bottom: 1rem;
+  color: #ca8a04;
+  font-size: 0.9rem;
+}
+
+.config-error-banner i {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.config-error-banner span {
+  flex: 1;
+}
+
+
 ::ng-deep .custom-breadcrumb {
   background: transparent !important;
   border: none !important;

@@ -31,7 +31,7 @@ public class PayrollConfigService : IPayrollConfigService
             NightSurchargeRate = dto.NightSurchargeRate,
             HolidayHourRate = dto.HolidayHourRate,
             ExtraHourRate = dto.ExtraHourRate,
-            ValidFrom = dto.ValidFrom.Date,
+            ValidFrom = DateTime.SpecifyKind(dto.ValidFrom.ToDateTime(TimeOnly.MinValue), DateTimeKind.Utc),
             Reason = dto.Reason,
             ChangedBy = dto.ChangedBy,
             CreatedAt = DateTime.UtcNow
@@ -51,7 +51,7 @@ public class PayrollConfigService : IPayrollConfigService
         config.NightSurchargeRate = dto.NightSurchargeRate;
         config.HolidayHourRate = dto.HolidayHourRate;
         config.ExtraHourRate = dto.ExtraHourRate;
-        config.ValidFrom = dto.ValidFrom.Date;
+        config.ValidFrom = DateTime.SpecifyKind(dto.ValidFrom.ToDateTime(TimeOnly.MinValue), DateTimeKind.Utc);
         config.Reason = dto.Reason;
         config.ChangedBy = dto.ChangedBy;
 

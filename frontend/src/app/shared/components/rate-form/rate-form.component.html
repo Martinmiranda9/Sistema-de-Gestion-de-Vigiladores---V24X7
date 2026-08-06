@@ -15,6 +15,14 @@
     </div>
   </div>
 
+  <!-- Banner: error al cargar config actual -->
+  <div *ngIf="configError" class="config-error-banner">
+    <i class="pi pi-exclamation-triangle"></i>
+    <span>No se pudo cargar la configuración actual del servidor.</span>
+    <button pButton label="Reintentar" icon="pi pi-refresh" class="p-button-sm p-button-outlined"
+      (click)="loadCurrentConfig()"></button>
+  </div>
+
   <div class="form-card">
     <div class="card-section">
       <div class="section-label">
@@ -89,8 +97,10 @@
         (click)="cancel()" [disabled]="saving"></button>
       <button pButton
         [label]="mode === 'actualizar' ? 'Guardar Cambios' : 'Programar Aumento'"
-        [icon]="mode === 'actualizar' ? 'pi pi-check' : 'pi pi-calendar-plus'"
-        class="btn-primary" (click)="save()" [disabled]="!isFormValid || saving" [loading]="saving"></button>
+        [icon]="configLoading ? 'pi pi-spin pi-spinner' : (mode === 'actualizar' ? 'pi pi-check' : 'pi pi-calendar-plus')"
+        class="btn-primary" (click)="save()" [disabled]="!isFormValid || saving" [loading]="saving"
+        [pTooltip]="configLoading ? 'Cargando configuración...' : (configError ? 'Error al cargar config. Reintentá.' : '')"
+        tooltipPosition="top"></button>
     </div>
   </div>
 </div>

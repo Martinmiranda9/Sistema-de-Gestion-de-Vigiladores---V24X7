@@ -21,7 +21,7 @@ public class PayrollConfigUpdateDTO
     public decimal ExtraHourRate { get; set; }
 
     [Required(ErrorMessage = "La fecha de vigencia es obligatoria.")]
-    public DateTime ValidFrom { get; set; }
+    public DateOnly ValidFrom { get; set; }
 
     [MaxLength(500)]
     public string? Reason { get; set; }

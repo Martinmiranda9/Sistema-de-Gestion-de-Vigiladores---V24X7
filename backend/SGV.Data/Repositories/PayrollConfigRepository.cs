@@ -20,11 +20,14 @@ public class PayrollConfigRepository : IPayrollConfigRepository
         => await _context.PayrollConfigs.FindAsync(id);
 
     public async Task<PayrollConfig?> GetCurrentAsync(DateTime date)
-        => await _context.PayrollConfigs
-            .Where(c => c.ValidFrom <= date.Date)
+    {
+        var utcDate = DateTime.SpecifyKind(date.Date, DateTimeKind.Utc);
+        return await _context.PayrollConfigs
+            .Where(c => c.ValidFrom <= utcDate)
             .OrderByDescending(c => c.ValidFrom)
             .ThenByDescending(c => c.CreatedAt)
             .FirstOrDefaultAsync();
+    }
 
     public async Task AddAsync(PayrollConfig config)
         => await _context.PayrollConfigs.AddAsync(config);
